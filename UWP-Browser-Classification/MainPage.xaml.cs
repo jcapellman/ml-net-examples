@@ -5,6 +5,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
+using UWP_Browser_Classification.Enums;
 using UWP_Browser_Classification.ViewModels;
 
 namespace UWP_Browser_Classification
@@ -20,31 +21,32 @@ namespace UWP_Browser_Classification
             DataContext = new MainPageViewModel();
         }
 
-        private void btnGo_Click(object sender, RoutedEventArgs e)
+        private void BtnGo_Click(object sender, RoutedEventArgs e)
         {
-            var webServiceUrl = ViewModel.WebServiceURL;
-
-            if (!webServiceUrl.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase) &&
-                !webServiceUrl.StartsWith("https://", StringComparison.CurrentCultureIgnoreCase))
-            {
-                webServiceUrl = $"http://{webServiceUrl}";
-            }
-
-            wvMain.Navigate(new Uri(webServiceUrl));
+            wvMain.Navigate(ViewModel.BuildUri());
         }
 
         private async void WvMain_OnNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            string html = await sender.InvokeScriptAsync("eval", new string[] { "document.documentElement.outerHTML;" });
+            var html = await sender.InvokeScriptAsync("eval", new[] { "document.documentElement.outerHTML;" });
             
-            ViewModel.RunModel(html);
+            var classification = await ViewModel.ClassifyAsync(html);
+
+            switch (classification)
+            {
+                case Classification.BENIGN:
+                    return;
+                case Classification.MALICIOUS:
+                    sender.NavigateToString($"<html><body>{ViewModel.WebServiceURL} was found to be a malicious site</body></html>");
+                    break;
+            }
         }
 
-        private void txtBxUrl_KeyUp(object sender, KeyRoutedEventArgs e)
+        private void TxtBxUrl_KeyUp(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Enter)
             {
-                btnGo_Click(null, null);
+                BtnGo_Click(null, null);
             }
         }
     }
