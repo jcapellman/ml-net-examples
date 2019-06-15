@@ -1,4 +1,9 @@
-﻿using System.ComponentModel;using System.Runtime.CompilerServices;
+﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+
+using UWP_Browser_Classification.Enums;
 
 namespace UWP_Browser_Classification.ViewModels
 {
@@ -33,9 +38,24 @@ namespace UWP_Browser_Classification.ViewModels
             }
         }
 
-        public async void RunModel(string html)
+        public Uri BuildUri()
         {
+            var webServiceUrl = WebServiceURL;
 
+            if (!webServiceUrl.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase) &&
+                !webServiceUrl.StartsWith("https://", StringComparison.CurrentCultureIgnoreCase))
+            {
+                webServiceUrl = $"http://{webServiceUrl}";
+            }
+
+            return new Uri(webServiceUrl);
+        }
+
+        public async Task<Classification> ClassifyAsync(string html)
+        {
+            // TODO: Run Model
+
+            return Classification.BENIGN;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
