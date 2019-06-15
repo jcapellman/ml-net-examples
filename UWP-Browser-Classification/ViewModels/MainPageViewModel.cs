@@ -33,6 +33,11 @@ namespace UWP_Browser_Classification.ViewModels
             }
         }
 
+        public async void RunModel(string html)
+        {
+
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

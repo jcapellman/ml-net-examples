@@ -1,7 +1,9 @@
 ﻿using System;
 
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 using UWP_Browser_Classification.ViewModels;
 
@@ -29,6 +31,21 @@ namespace UWP_Browser_Classification
             }
 
             wvMain.Navigate(new Uri(webServiceUrl));
+        }
+
+        private async void WvMain_OnNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            string html = await sender.InvokeScriptAsync("eval", new string[] { "document.documentElement.outerHTML;" });
+            
+            ViewModel.RunModel(html);
+        }
+
+        private void txtBxUrl_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                btnGo_Click(null, null);
+            }
         }
     }
 }

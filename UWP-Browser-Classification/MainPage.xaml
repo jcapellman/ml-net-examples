@@ -20,9 +20,9 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding WebServiceURL, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Grid.Row="0" Grid.Column="0" KeyUp="txtBxUrl_KeyUp" Text="{Binding WebServiceURL, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <Button Grid.Row="0" Grid.Column="1" Content="GO" Click="btnGo_Click" IsEnabled="{Binding EnableGoButton}" />
 
-        <WebView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="wvMain" />
+        <WebView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="wvMain" NavigationCompleted="WvMain_OnNavigationCompleted" />
     </Grid>
 </Page>
