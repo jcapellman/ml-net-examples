@@ -1,21 +1,23 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 using UWP_Browser_Classification.Enums;
+using UWP_Browser_Classification.ML;
 
 namespace UWP_Browser_Classification.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
+        private Prediction _prediction = new Prediction();
+
         private bool _enableGoButton;
 
         public bool EnableGoButton
         {
             get => _enableGoButton;
 
-            set
+            private set
             {
                 _enableGoButton = value;
                 OnPropertyChanged();
@@ -51,11 +53,13 @@ namespace UWP_Browser_Classification.ViewModels
             return new Uri(webServiceUrl);
         }
 
-        public async Task<Classification> ClassifyAsync(string html)
+        public (Classification ClassificationResult, string BrowserContent) Classify(string html)
         {
-            // TODO: Run Model
+            var result = _prediction.Predict(html);
 
-            return Classification.BENIGN;
+            return result == Classification.BENIGN ? 
+                (Classification.BENIGN, string.Empty) : 
+                (Classification.MALICIOUS, $"<html><body>{WebServiceURL} was found to be a malicious site</body></html>");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

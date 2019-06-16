@@ -21,32 +21,34 @@ namespace UWP_Browser_Classification
             DataContext = new MainPageViewModel();
         }
 
-        private void BtnGo_Click(object sender, RoutedEventArgs e)
-        {
-            wvMain.Navigate(ViewModel.BuildUri());
-        }
+        private void BtnGo_Click(object sender, RoutedEventArgs e) => Navigate();
 
         private async void WvMain_OnNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
             var html = await sender.InvokeScriptAsync("eval", new[] { "document.documentElement.outerHTML;" });
             
-            var classification = await ViewModel.ClassifyAsync(html);
+            var (classificationResult, browserContent) = ViewModel.Classify(html);
 
-            switch (classification)
+            switch (classificationResult)
             {
                 case Classification.BENIGN:
                     return;
                 case Classification.MALICIOUS:
-                    sender.NavigateToString($"<html><body>{ViewModel.WebServiceURL} was found to be a malicious site</body></html>");
+                    sender.NavigateToString(browserContent);
                     break;
             }
         }
 
+        private void Navigate()
+        {
+            wvMain.Navigate(ViewModel.BuildUri());
+        }
+
         private void TxtBxUrl_KeyUp(object sender, KeyRoutedEventArgs e)
         {
-            if (e.Key == VirtualKey.Enter)
+            if (e.Key == VirtualKey.Enter && ViewModel.EnableGoButton)
             {
-                BtnGo_Click(null, null);
+                Navigate();
             }
         }
     }
