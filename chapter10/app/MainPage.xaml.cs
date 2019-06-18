@@ -5,10 +5,11 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
-using UWP_Browser_Classification.Enums;
-using UWP_Browser_Classification.ViewModels;
+using chapter10_library.Enums;
 
-namespace UWP_Browser_Classification
+using chapter10_app.ViewModels;
+
+namespace chapter10_app
 {
     public sealed partial class MainPage : Page
     {

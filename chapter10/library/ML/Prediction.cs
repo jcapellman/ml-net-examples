@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 
+using chapter10_library.Enums;
+using chapter10_library.ML.Objects;
+
 using Microsoft.ML;
 
-using UWP_Browser_Classification.Enums;
-using UWP_Browser_Classification.ML.Objects;
-
-namespace UWP_Browser_Classification.ML
+namespace chapter10_library.ML
 {
     public class Prediction
     {

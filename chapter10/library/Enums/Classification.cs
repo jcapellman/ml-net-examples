@@ -1,4 +1,4 @@
-﻿namespace UWP_Browser_Classification.Enums
+﻿namespace chapter10_library.Enums
 {
     public enum Classification
     {

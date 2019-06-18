@@ -2,10 +2,10 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-using UWP_Browser_Classification.Enums;
-using UWP_Browser_Classification.ML;
+using chapter10_library.Enums;
+using chapter10_library.ML;
 
-namespace UWP_Browser_Classification.ViewModels
+namespace chapter10_app.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {

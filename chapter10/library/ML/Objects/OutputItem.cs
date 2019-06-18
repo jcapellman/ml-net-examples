@@ -1,4 +1,4 @@
-﻿namespace UWP_Browser_Classification.ML.Objects
+﻿namespace chapter10_library.ML.Objects
 {
     public class OutputItem
     {
