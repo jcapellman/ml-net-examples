@@ -9,7 +9,7 @@ namespace chapter10_app.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
-        private Prediction _prediction = new Prediction();
+        private readonly Prediction _prediction = new Prediction();
 
         private bool _enableGoButton;
 
