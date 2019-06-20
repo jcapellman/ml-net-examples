@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 using chapter10_library.ML.Objects;
 
@@ -12,20 +14,30 @@ namespace UWP_Browser_Classification_Trainer
 
         private static bool SaveModel(ITransformer trainedModel, DataViewSchema schema, string OutputModelPath)
         {
-            using (var fileStream = new FileStream(OutputModelPath, FileMode.Create, FileAccess.Write, FileShare.Write))
+            try
             {
-                MlContext.Model.Save(trainedModel, schema, fileStream);
-            }
+                using (var fileStream =
+                    new FileStream(OutputModelPath, FileMode.Create, FileAccess.Write, FileShare.Write))
+                {
+                    MlContext.Model.Save(trainedModel, schema, fileStream);
+                }
 
-            return true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"SaveModel: Exception thrown when saving {OutputModelPath}: {ex}");
+
+                return false;
+            }
         }
 
-        private static (string ModelOutputPath, string InputDataPath) ParseArgs(string[] args)
+        private static (string ModelOutputPath, string InputDataPath) ParseArgs(IReadOnlyList<string> args)
         {
-            var outputPath = "../../chapter10_app/classification.mdl";
-            var inputDataPath = "data.csv";
+            const string outputPath = "../../chapter10_app/classification.mdl";
+            const string inputDataPath = "data.csv";
 
-            switch (args.Length)
+            switch (args.Count)
             {
                 case 0:
                     return (outputPath, inputDataPath);
@@ -55,7 +67,18 @@ namespace UWP_Browser_Classification_Trainer
 
             var metrics = MlContext.BinaryClassification.Evaluate(predictions, "Label");
 
-            SaveModel(model, splitDataView.TrainSet.Schema, modelOutputPath);
+            Console.WriteLine($"Metrics: Entropy={metrics.Entropy} | Accuracy={metrics.Accuracy} | AUC={metrics.AreaUnderRocCurve}");
+
+            var modelCreationResult = SaveModel(model, splitDataView.TrainSet.Schema, modelOutputPath);
+
+            if (modelCreationResult)
+            {
+                Console.WriteLine($"Successfully saved model to {modelOutputPath}");
+
+                return;
+            }
+
+            Console.WriteLine("Failed to write model");
         }
     }
 }
