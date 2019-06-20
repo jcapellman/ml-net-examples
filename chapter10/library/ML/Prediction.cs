@@ -27,9 +27,9 @@ namespace chapter10_library.ML
         {
             var predictor = MlContext.Model.CreatePredictionEngine<InputItem, OutputItem>(_model);
 
-            var result = predictor.Predict(new InputItem { Content = html });
+            var result = predictor.Predict(new InputItem { HTMLContent = html });
 
-            return result.Confidence > THRESHOLD ? Classification.MALICIOUS : Classification.BENIGN;
+            return result.Probability > THRESHOLD ? Classification.MALICIOUS : Classification.BENIGN;
         }
     }
 }

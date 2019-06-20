@@ -56,16 +56,14 @@ namespace UWP_Browser_Classification_Trainer
 
             var splitDataView = MlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
 
-            var featuresColumnName = "Features";
-
-            var estimator = MlContext.Transforms.Text.FeaturizeText(nameof(InputItem.Content))
-                .Append(MlContext.BinaryClassification.Trainers.FastTree(labelColumnName: "Label", featureColumnName: featuresColumnName));
+            var estimator = MlContext.Transforms.Text.FeaturizeText(nameof(InputItem.HTMLContent))
+                .Append(MlContext.BinaryClassification.Trainers.FastTree());
 
             var model = estimator.Fit(splitDataView.TrainSet);
 
             var predictions = model.Transform(splitDataView.TestSet);
 
-            var metrics = MlContext.BinaryClassification.Evaluate(predictions, "Label");
+            var metrics = MlContext.BinaryClassification.Evaluate(predictions);
 
             Console.WriteLine($"Metrics: Entropy={metrics.Entropy} | Accuracy={metrics.Accuracy} | AUC={metrics.AreaUnderRocCurve}");
 
