@@ -8,9 +8,12 @@ namespace chapter02
     {
         static void Main(string[] args)
         {
-            if (args.Length < 2)
+            if (args.Length != 2)
             {
-                Console.WriteLine("No arguments passed in, exiting");
+                Console.WriteLine($"Invalid arguments passed in, exiting.{Environment.NewLine}{Environment.NewLine}Usage:{Environment.NewLine}" +
+                                  $"predict <sentence of text to predict against>{Environment.NewLine}" +
+                                  $"or {Environment.NewLine}" +
+                                  $"train <path to training data file>{Environment.NewLine}");
 
                 return;
             }

@@ -20,7 +20,7 @@ namespace chapter02.ML
             }
 
             ITransformer mlModel;
-
+            
             using (var stream = new FileStream(ModelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 mlModel = MlContext.Model.Load(stream, out _);
