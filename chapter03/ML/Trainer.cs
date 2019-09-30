@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 
+using chapter03.Common;
 using chapter03.ML.Base;
 using chapter03.ML.Objects;
 
@@ -24,18 +25,17 @@ namespace chapter03.ML
             var dataSplit = MlContext.Data.TrainTestSplit(trainingDataView, testFraction: 0.4);
 
             var dataProcessPipeline = MlContext.Transforms.CopyColumns("Label", nameof(EmploymentHistory.DurationInMonths))
-                .Append(MlContext.Transforms.NormalizeMeanVariance("IsMarried"))
-                .Append(MlContext.Transforms.NormalizeMeanVariance("BSDegree"))
-                .Append(MlContext.Transforms.NormalizeMeanVariance("MSDegree"))
-                .Append(MlContext.Transforms.NormalizeMeanVariance("YearsExperience")
-                .Append(MlContext.Transforms.NormalizeMeanVariance("AgeAtHire"))
-                .Append(MlContext.Transforms.NormalizeMeanVariance("HasKids"))
-                .Append(MlContext.Transforms.NormalizeMeanVariance("WithinMonthOfVesting"))
-                .Append(MlContext.Transforms.NormalizeMeanVariance("DeskDecorations"))
-                .Append(MlContext.Transforms.NormalizeMeanVariance("LongCommute"))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(EmploymentHistory.IsMarried)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(EmploymentHistory.BSDegree)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(EmploymentHistory.MSDegree)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(EmploymentHistory.YearsExperience))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(EmploymentHistory.AgeAtHire)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(EmploymentHistory.HasKids)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(EmploymentHistory.WithinMonthOfVesting)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(EmploymentHistory.DeskDecorations)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(EmploymentHistory.LongCommute)))
                 .Append(MlContext.Transforms.Concatenate("Features",
-                    "IsMarried", "BSDegree", "MSDegree", "YearsExperience", "AgeAtHire", "HasKids", 
-                    "WithinMonthOfVesting", "DeskDecorations", "LongCommute")));
+                    typeof(EmploymentHistory).ToPropertyList<EmploymentHistory>(nameof(EmploymentHistory.DurationInMonths)))));
 
             var trainer = MlContext.Regression.Trainers.Sdca(labelColumnName: "Label", featureColumnName: "Features");
 
