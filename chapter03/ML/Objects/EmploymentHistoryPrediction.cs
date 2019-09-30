@@ -6,8 +6,5 @@ namespace chapter03.ML.Objects
     {
         [ColumnName("Score")]
         public float DurationInMonths;
-
-        [ColumnName("Probability")]
-        public float Probability { get; set; }
     }
 }

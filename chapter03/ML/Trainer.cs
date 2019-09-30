@@ -21,10 +21,9 @@ namespace chapter03.ML
 
             var trainingDataView = MlContext.Data.LoadFromTextFile<EmploymentHistory>(trainingFileName, ',');
 
-            var dataSplit = MlContext.Data.TrainTestSplit(trainingDataView, testFraction: 0.2);
+            var dataSplit = MlContext.Data.TrainTestSplit(trainingDataView, testFraction: 0.4);
 
             var dataProcessPipeline = MlContext.Transforms.CopyColumns("Label", nameof(EmploymentHistory.DurationInMonths))
-                .Append(MlContext.Transforms.Categorical.OneHotEncoding("PositionNameEncoded", "PositionName"))
                 .Append(MlContext.Transforms.NormalizeMeanVariance("IsMarried"))
                 .Append(MlContext.Transforms.NormalizeMeanVariance("BSDegree"))
                 .Append(MlContext.Transforms.NormalizeMeanVariance("MSDegree"))
@@ -34,7 +33,7 @@ namespace chapter03.ML
                 .Append(MlContext.Transforms.NormalizeMeanVariance("WithinMonthOfVesting"))
                 .Append(MlContext.Transforms.NormalizeMeanVariance("DeskDecorations"))
                 .Append(MlContext.Transforms.NormalizeMeanVariance("LongCommute"))
-                .Append(MlContext.Transforms.Concatenate("Features", "PositionNameEncoded", 
+                .Append(MlContext.Transforms.Concatenate("Features",
                     "IsMarried", "BSDegree", "MSDegree", "YearsExperience", "AgeAtHire", "HasKids", 
                     "WithinMonthOfVesting", "DeskDecorations", "LongCommute")));
 
@@ -47,15 +46,13 @@ namespace chapter03.ML
 
             var testSetTransform = trainedModel.Transform(dataSplit.TestSet);
 
-            var modelMetrics = MlContext.Regression.Evaluate(
-                data: testSetTransform, 
-                labelColumnName: nameof(EmploymentHistory.DurationInMonths));
+            var modelMetrics = MlContext.Regression.Evaluate(testSetTransform);
 
-            Console.WriteLine($"Loss Function: {modelMetrics.LossFunction:P2}{Environment.NewLine}" +
-                              $"Mean Absolute Error: {modelMetrics.MeanAbsoluteError:P2}{Environment.NewLine}" +
-                              $"Mean Squared Error: {modelMetrics.MeanSquaredError:P2}{Environment.NewLine}" +
-                              $"RSquared: {modelMetrics.RSquared:P2}{Environment.NewLine}" +
-                              $"Root Mean Squared Error: {modelMetrics.RootMeanSquaredError:P2}");
+            Console.WriteLine($"Loss Function: {modelMetrics.LossFunction:0.##}{Environment.NewLine}" +
+                              $"Mean Absolute Error: {modelMetrics.MeanAbsoluteError:#.##}{Environment.NewLine}" +
+                              $"Mean Squared Error: {modelMetrics.MeanSquaredError:#.##}{Environment.NewLine}" +
+                              $"RSquared: {modelMetrics.RSquared:0.##}{Environment.NewLine}" +
+                              $"Root Mean Squared Error: {modelMetrics.RootMeanSquaredError:#.##}");
         }
     }
 }

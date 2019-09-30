@@ -51,7 +51,7 @@ namespace chapter03.ML
             Console.WriteLine(
                                 $"Based on input json:{System.Environment.NewLine}" +
                                 $"{json}{System.Environment.NewLine}" + 
-                                $"The employee is predicted to work {prediction.DurationInMonths:#.##} months with a probability of {prediction.Probability:P0}");
+                                $"The employee is predicted to work {prediction.DurationInMonths:#.##} months");
         }
     }
 }
