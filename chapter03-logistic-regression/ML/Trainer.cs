@@ -21,10 +21,10 @@ namespace chapter03_logistic_regression.ML
 
             var trainingDataView = MlContext.Data.LoadFromTextFile<FileInput>(trainingFileName);
 
-            var dataSplit = MlContext.Data.TrainTestSplit(trainingDataView, testFraction: 0.4);
+            var dataSplit = MlContext.Data.TrainTestSplit(trainingDataView, testFraction: 0.2);
 
             var dataProcessPipeline = MlContext.Transforms.CopyColumns("Label", nameof(FileInput.Label))
-                .Append(MlContext.Transforms.Text.ProduceHashedNgrams("NGrams", nameof(FileInput.Strings)))
+                .Append(MlContext.Transforms.Text.FeaturizeText("NGrams", nameof(FileInput.Strings)))
                 .Append(MlContext.Transforms.Concatenate("Features", "NGrams"));
 
             var trainer = MlContext.BinaryClassification.Trainers.SdcaLogisticRegression(labelColumnName: "Label", featureColumnName: "Features");
@@ -33,16 +33,6 @@ namespace chapter03_logistic_regression.ML
 
             ITransformer trainedModel = trainingPipeline.Fit(dataSplit.TrainSet);
             MlContext.Model.Save(trainedModel, dataSplit.TrainSet.Schema, ModelPath);
-
-            var testSetTransform = trainedModel.Transform(dataSplit.TestSet);
-
-            var modelMetrics = MlContext.BinaryClassification.Evaluate(testSetTransform);
-
-            Console.WriteLine($"Entropy: {modelMetrics.Entropy:0.##}{Environment.NewLine}" +
-                              $"Log Loss: {modelMetrics.LogLoss:#.##}{Environment.NewLine}" +
-                              $"Log Loss Reduction: {modelMetrics.LogLossReduction:#.##}{Environment.NewLine}" +
-                              $"Accuracy: {modelMetrics.Accuracy:0.##}{Environment.NewLine}" +
-                              $"F1 Score: {modelMetrics.F1Score:#.##}");
         }
     }
 }

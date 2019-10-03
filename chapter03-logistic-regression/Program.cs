@@ -13,7 +13,9 @@ namespace chapter03_logistic_regression
                 Console.WriteLine($"Invalid arguments passed in, exiting.{Environment.NewLine}{Environment.NewLine}Usage:{Environment.NewLine}" +
                                   $"predict <path to input file>{Environment.NewLine}" +
                                   $"or {Environment.NewLine}" +
-                                  $"train <path to training data file>{Environment.NewLine}");
+                                  $"train <path to training data file>{Environment.NewLine}" + 
+                                  $"or {Environment.NewLine}" +
+                                  $"extract <path to folder>{Environment.NewLine}");
 
                 return;
             }
@@ -21,7 +23,8 @@ namespace chapter03_logistic_regression
             switch (args[0])
             {
                 case "extract":
-                    new FeatureExtractor(args[1]);
+                    new FeatureExtractor().Extract(args[1]);
+                    break;
                 case "predict":
                     new Predictor().Predict(args[1]);
                     break;
