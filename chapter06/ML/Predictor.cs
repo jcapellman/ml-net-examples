@@ -42,16 +42,16 @@ namespace chapter04.ML
                 return;
             }
 
-            var predictionEngine = MlContext.Model.CreatePredictionEngine<EmploymentHistory, EmploymentHistoryPrediction>(mlModel);
+            var predictionEngine = MlContext.Model.CreatePredictionEngine<CarInventory, CarInventoryPrediction>(mlModel);
 
             var json = File.ReadAllText(inputDataFile);
 
-            var prediction = predictionEngine.Predict(JsonConvert.DeserializeObject<EmploymentHistory>(json));
+            var prediction = predictionEngine.Predict(JsonConvert.DeserializeObject<CarInventory>(json));
 
             Console.WriteLine(
                                 $"Based on input json:{System.Environment.NewLine}" +
                                 $"{json}{System.Environment.NewLine}" + 
-                                $"The employee is predicted to work {prediction.DurationInMonths:#.##} months");
+                                $"The car price is a {(prediction.Label ? "good" : "bad")} deal, with a {prediction.Probability:P0} confidence");
         }
     }
 }
