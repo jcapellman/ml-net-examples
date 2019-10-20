@@ -34,40 +34,22 @@ namespace chapter05.ML
                 .Append(MlContext.Transforms.NormalizeMeanVariance(inputColumnName: "Features",
                     outputColumnName: "FeaturesNormalizedByMeanVar"));
 
-            var trainer = MlContext.BinaryClassification.Trainers.FastTree(labelColumnName: nameof(CarInventory.Label),
-                featureColumnName: "FeaturesNormalizedByMeanVar",
-                numberOfLeaves: 2,
-                numberOfTrees: 1000,
-                minimumExampleCountPerLeaf: 1,
-                learningRate: 0.2);
+            var trainer = MlContext.Clustering.Trainers.KMeans();
 
             var trainingPipeline = dataProcessPipeline.Append(trainer);
 
             var trainedModel = trainingPipeline.Fit(trainingDataView);
             MlContext.Model.Save(trainedModel, trainingDataView.Schema, ModelPath);
 
-            var evaluationPipeline = trainedModel.Append(MlContext.Transforms
-                .CalculateFeatureContribution(trainedModel.LastTransformer)
-                .Fit(dataProcessPipeline.Fit(trainingDataView).Transform(trainingDataView)));
-
             var testDataView = MlContext.Data.LoadFromTextFile<CarInventory>(testFileName, ',', hasHeader: false);
 
-            var testSetTransform = evaluationPipeline.Transform(testDataView);
-
-            var modelMetrics = MlContext.BinaryClassification.Evaluate(data: testSetTransform,
+            var modelMetrics = MlContext.Clustering.Evaluate(data: testDataView,
                 labelColumnName: nameof(CarInventory.Label),
                 scoreColumnName: "Score");
 
-            Console.WriteLine($"Accuracy: {modelMetrics.Accuracy:P2}");
-            Console.WriteLine($"Area Under Curve: {modelMetrics.AreaUnderRocCurve:P2}");
-            Console.WriteLine($"Area under Precision recall Curve: {modelMetrics.AreaUnderPrecisionRecallCurve:P2}");
-            Console.WriteLine($"F1Score: {modelMetrics.F1Score:P2}");
-            Console.WriteLine($"LogLoss: {modelMetrics.LogLoss:#.##}");
-            Console.WriteLine($"LogLossReduction: {modelMetrics.LogLossReduction:#.##}");
-            Console.WriteLine($"PositivePrecision: {modelMetrics.PositivePrecision:#.##}");
-            Console.WriteLine($"PositiveRecall: {modelMetrics.PositiveRecall:#.##}");
-            Console.WriteLine($"NegativePrecision: {modelMetrics.NegativePrecision:#.##}");
-            Console.WriteLine($"NegativeRecall: {modelMetrics.NegativeRecall:P2}");
+            Console.WriteLine($"Accuracy: {modelMetrics.AverageDistance}");
+            Console.WriteLine($"Area Under Curve: {modelMetrics.DaviesBouldinIndex}");
+            Console.WriteLine($"Area under Precision recall Curve: {modelMetrics.NormalizedMutualInformation}");
         }
     }
 }
