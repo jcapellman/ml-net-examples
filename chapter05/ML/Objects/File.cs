@@ -2,7 +2,7 @@
 
 namespace chapter05.ML.Objects
 {
-    public class CarInventory
+    public class FileData
     {
         [LoadColumn(0)]
         public float HasSunroof { get; set; }

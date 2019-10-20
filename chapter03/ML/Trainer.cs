@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
-
+using System.Linq;
 using chapter03.Common;
 using chapter03.ML.Base;
 using chapter03.ML.Objects;
 
 using Microsoft.ML;
+using Microsoft.ML.Data;
 
 namespace chapter03.ML
 {
@@ -21,6 +22,10 @@ namespace chapter03.ML
             }
 
             var trainingDataView = MlContext.Data.LoadFromTextFile<EmploymentHistory>(trainingFileName, ',');
+
+            IDataView trainingDataView = MlContext.Data.FilterRowsByColumn(trainingDataView, nameof(TaxiTrip.FareAmount), lowerBound: 1, upperBound: 150);
+            var cnt2 = trainingDataView.GetColumn<float>(nameof(TaxiTrip.FareAmount)).Count();
+
 
             var dataSplit = MlContext.Data.TrainTestSplit(trainingDataView, testFraction: 0.4);
 

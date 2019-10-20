@@ -6,22 +6,20 @@ using chapter05.ML.Objects;
 
 using Microsoft.ML;
 
-using Newtonsoft.Json;
-
 namespace chapter05.ML
 {
     public class Predictor : BaseML
     {
         public void Predict(string inputDataFile)
         {
-            if (!File.Exists(ModelPath))
+            if (!System.IO.File.Exists(ModelPath))
             {
                 Console.WriteLine($"Failed to find model at {ModelPath}");
 
                 return;
             }
 
-            if (!File.Exists(inputDataFile))
+            if (!System.IO.File.Exists(inputDataFile))
             {
                 Console.WriteLine($"Failed to find input data at {inputDataFile}");
 
@@ -42,11 +40,12 @@ namespace chapter05.ML
                 return;
             }
 
-            var predictionEngine = MlContext.Model.CreatePredictionEngine<CarInventory, CarInventoryPrediction>(mlModel);
+            var predictionEngine = MlContext.Model.CreatePredictionEngine<FileData, FileTypePrediction>(mlModel);
 
-            var json = File.ReadAllText(inputDataFile);
+            var json = System.IO.File.ReadAllText(inputDataFile);
 
-            var prediction = predictionEngine.Predict(JsonConvert.DeserializeObject<CarInventory>(json));
+            // TODO Read in Bytes
+            var prediction = predictionEngine.Predict(new FileData());
 
             Console.WriteLine(
                                 $"Based on input json:{System.Environment.NewLine}" +

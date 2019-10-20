@@ -1,6 +1,6 @@
 ﻿namespace chapter05.ML.Objects
 {
-    public class CarInventoryPrediction
+    public class FileTypePrediction
     {
         public bool Label { get; set; }
 

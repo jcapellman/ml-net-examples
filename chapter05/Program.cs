@@ -11,7 +11,7 @@ namespace chapter05
             if (args.Length < 2)
             {
                 Console.WriteLine($"Invalid arguments passed in, exiting.{Environment.NewLine}{Environment.NewLine}Usage:{Environment.NewLine}" +
-                                  $"predict <path to input json file>{Environment.NewLine}" +
+                                  $"predict <path to input file>{Environment.NewLine}" +
                                   $"or {Environment.NewLine}" +
                                   $"train <path to training data file> <path to test data file>{Environment.NewLine}");
 

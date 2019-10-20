@@ -13,24 +13,24 @@ namespace chapter05.ML
     {
         public void Train(string trainingFileName, string testFileName)
         {
-            if (!File.Exists(trainingFileName))
+            if (!System.IO.File.Exists(trainingFileName))
             {
                 Console.WriteLine($"Failed to find training data file ({trainingFileName}");
 
                 return;
             }
 
-            if (!File.Exists(testFileName))
+            if (!System.IO.File.Exists(testFileName))
             {
                 Console.WriteLine($"Failed to find test data file ({testFileName}");
 
                 return;
             }
 
-            var trainingDataView = MlContext.Data.LoadFromTextFile<CarInventory>(trainingFileName, ',', hasHeader: false);
+            var trainingDataView = MlContext.Data.LoadFromTextFile<FileData>(trainingFileName, ',', hasHeader: false);
 
             IEstimator<ITransformer> dataProcessPipeline = MlContext.Transforms.Concatenate("Features",
-                typeof(CarInventory).ToPropertyList<CarInventory>(nameof(CarInventory.Label)))
+                typeof(File).ToPropertyList<FileData>(nameof(FileData.Label)))
                 .Append(MlContext.Transforms.NormalizeMeanVariance(inputColumnName: "Features",
                     outputColumnName: "FeaturesNormalizedByMeanVar"));
 
@@ -41,10 +41,10 @@ namespace chapter05.ML
             var trainedModel = trainingPipeline.Fit(trainingDataView);
             MlContext.Model.Save(trainedModel, trainingDataView.Schema, ModelPath);
 
-            var testDataView = MlContext.Data.LoadFromTextFile<CarInventory>(testFileName, ',', hasHeader: false);
+            var testDataView = MlContext.Data.LoadFromTextFile<Objects.FileData>(testFileName, ',', hasHeader: false);
 
             var modelMetrics = MlContext.Clustering.Evaluate(data: testDataView,
-                labelColumnName: nameof(CarInventory.Label),
+                labelColumnName: nameof(FileData.Label),
                 scoreColumnName: "Score");
 
             Console.WriteLine($"Accuracy: {modelMetrics.AverageDistance}");
