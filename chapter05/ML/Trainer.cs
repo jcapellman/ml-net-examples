@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 
-using chapter05.Common;
 using chapter05.ML.Base;
 using chapter05.ML.Objects;
 
@@ -29,22 +27,17 @@ namespace chapter05.ML
 
             var trainingDataView = MlContext.Data.LoadFromTextFile<FileData>(trainingFileName, ',', hasHeader: false);
 
-            IEstimator<ITransformer> dataProcessPipeline = MlContext.Transforms.Concatenate("Features",
-                typeof(File).ToPropertyList<FileData>(nameof(FileData.Label)))
-                .Append(MlContext.Transforms.NormalizeMeanVariance(inputColumnName: "Features",
-                    outputColumnName: "FeaturesNormalizedByMeanVar"));
+            var dataProcessPipeline = MlContext.Transforms
+                .Concatenate("Features", nameof(FileData.Size), nameof(FileData.Size), nameof(FileData.Header))
+                .Append(MlContext.Clustering.Trainers.KMeans("Features", numberOfClusters: 3));
 
-            var trainer = MlContext.Clustering.Trainers.KMeans();
-
-            var trainingPipeline = dataProcessPipeline.Append(trainer);
-
-            var trainedModel = trainingPipeline.Fit(trainingDataView);
+            var trainedModel = dataProcessPipeline.Fit(trainingDataView);
             MlContext.Model.Save(trainedModel, trainingDataView.Schema, ModelPath);
 
-            var testDataView = MlContext.Data.LoadFromTextFile<Objects.FileData>(testFileName, ',', hasHeader: false);
+            var testDataView = MlContext.Data.LoadFromTextFile<FileData>(testFileName, ',', hasHeader: false);
 
             var modelMetrics = MlContext.Clustering.Evaluate(data: testDataView,
-                labelColumnName: nameof(FileData.Label),
+                labelColumnName: "Features",
                 scoreColumnName: "Score");
 
             Console.WriteLine($"Accuracy: {modelMetrics.AverageDistance}");

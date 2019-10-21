@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 
+using chapter05.Enums;
 using chapter05.ML.Base;
 using chapter05.ML.Objects;
 
@@ -42,15 +43,12 @@ namespace chapter05.ML
 
             var predictionEngine = MlContext.Model.CreatePredictionEngine<FileData, FileTypePrediction>(mlModel);
 
-            var json = System.IO.File.ReadAllText(inputDataFile);
-
-            // TODO Read in Bytes
-            var prediction = predictionEngine.Predict(new FileData());
+            var prediction = predictionEngine.Predict(new FileData(System.IO.File.ReadAllBytes(inputDataFile)));
 
             Console.WriteLine(
-                                $"Based on input json:{System.Environment.NewLine}" +
-                                $"{json}{System.Environment.NewLine}" + 
-                                $"The car price is a {(prediction.PredictedLabel ? "good" : "bad")} deal, with a {prediction.Probability:P0} confidence");
+                                $"Based on input file:{System.Environment.NewLine}" +
+                                $"{inputDataFile}{Environment.NewLine}{Environment.NewLine}" + 
+                                $"The file is predicted to be a {(FileTypes)prediction .PredictedClusterId} deal, with {string.Join(",", prediction.Distances)} distances to other clusters");
         }
     }
 }

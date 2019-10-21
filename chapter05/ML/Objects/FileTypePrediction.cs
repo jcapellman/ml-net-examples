@@ -1,13 +1,13 @@
-﻿namespace chapter05.ML.Objects
+﻿using Microsoft.ML.Data;
+
+namespace chapter05.ML.Objects
 {
     public class FileTypePrediction
     {
-        public bool Label { get; set; }
+        [ColumnName("PredictedLabel")]
+        public uint PredictedClusterId;
 
-        public bool PredictedLabel { get; set; }
-
-        public float Score { get; set; }
-
-        public float Probability { get; set; }
+        [ColumnName("Score")]
+        public float[] Distances;
     }
 }
