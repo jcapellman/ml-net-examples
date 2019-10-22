@@ -40,9 +40,9 @@ namespace chapter05.ML
                 labelColumnName: "Features",
                 scoreColumnName: "Score");
 
-            Console.WriteLine($"Accuracy: {modelMetrics.AverageDistance}");
-            Console.WriteLine($"Area Under Curve: {modelMetrics.DaviesBouldinIndex}");
-            Console.WriteLine($"Area under Precision recall Curve: {modelMetrics.NormalizedMutualInformation}");
+            Console.WriteLine($"Average Distance: {modelMetrics.AverageDistance}");
+            Console.WriteLine($"Davies Bould Index: {modelMetrics.DaviesBouldinIndex}");
+            Console.WriteLine($"Normalized Mutual Information: {modelMetrics.NormalizedMutualInformation}");
         }
     }
 }
