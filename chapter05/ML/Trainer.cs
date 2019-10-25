@@ -28,8 +28,8 @@ namespace chapter05.ML
             var trainingDataView = MlContext.Data.LoadFromTextFile<FileData>(trainingFileName, ',', hasHeader: false);
 
             var dataProcessPipeline = MlContext.Transforms
-                .Concatenate("Features", nameof(FileData.Size), nameof(FileData.Size), nameof(FileData.Header))
-                .Append(MlContext.Clustering.Trainers.KMeans("Features", numberOfClusters: 3));
+                .Concatenate(FEATURES, nameof(FileData.Size), nameof(FileData.Size), nameof(FileData.Header))
+                .Append(MlContext.Clustering.Trainers.KMeans(FEATURES, numberOfClusters: 3));
 
             var trainedModel = dataProcessPipeline.Fit(trainingDataView);
             MlContext.Model.Save(trainedModel, trainingDataView.Schema, ModelPath);
@@ -37,8 +37,8 @@ namespace chapter05.ML
             var testDataView = MlContext.Data.LoadFromTextFile<FileData>(testFileName, ',', hasHeader: false);
 
             var modelMetrics = MlContext.Clustering.Evaluate(data: testDataView,
-                labelColumnName: "Features",
-                scoreColumnName: "Score");
+                labelColumnName: FEATURES,
+                scoreColumnName: nameof(FileTypePrediction.Distances));
 
             Console.WriteLine($"Average Distance: {modelMetrics.AverageDistance}");
             Console.WriteLine($"Davies Bould Index: {modelMetrics.DaviesBouldinIndex}");
