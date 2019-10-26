@@ -13,13 +13,17 @@ namespace chapter05
                 Console.WriteLine($"Invalid arguments passed in, exiting.{Environment.NewLine}{Environment.NewLine}Usage:{Environment.NewLine}" +
                                   $"predict <path to input file>{Environment.NewLine}" +
                                   $"or {Environment.NewLine}" +
-                                  $"train <path to training data file> <path to test data file>{Environment.NewLine}");
+                                  $"train <path to training data file> <path to test data file>{Environment.NewLine}" +
+                                  $"or {Environment.NewLine}" + $"extract <path to folder>{Environment.NewLine}");
 
                 return;
             }
 
             switch (args[0])
             {
+                case "extract":
+                    new FeatureExtractor().Extract(args[1]);
+                    break;
                 case "predict":
                     new Predictor().Predict(args[1]);
                     break;

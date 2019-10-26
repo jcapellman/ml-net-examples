@@ -13,14 +13,14 @@ namespace chapter05.ML
     {
         public void Predict(string inputDataFile)
         {
-            if (!System.IO.File.Exists(ModelPath))
+            if (!File.Exists(ModelPath))
             {
                 Console.WriteLine($"Failed to find model at {ModelPath}");
 
                 return;
             }
 
-            if (!System.IO.File.Exists(inputDataFile))
+            if (!File.Exists(inputDataFile))
             {
                 Console.WriteLine($"Failed to find input data at {inputDataFile}");
 
@@ -43,7 +43,7 @@ namespace chapter05.ML
 
             var predictionEngine = MlContext.Model.CreatePredictionEngine<FileData, FileTypePrediction>(mlModel);
 
-            var prediction = predictionEngine.Predict(new FileData(System.IO.File.ReadAllBytes(inputDataFile)));
+            var prediction = predictionEngine.Predict(new FileData(File.ReadAllBytes(inputDataFile)));
 
             Console.WriteLine(
                                 $"Based on input file:{System.Environment.NewLine}" +
