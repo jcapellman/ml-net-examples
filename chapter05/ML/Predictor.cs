@@ -43,12 +43,14 @@ namespace chapter05.ML
 
             var predictionEngine = MlContext.Model.CreatePredictionEngine<FileData, FileTypePrediction>(mlModel);
 
-            var prediction = predictionEngine.Predict(new FileData(File.ReadAllBytes(inputDataFile)));
+            var fileData = new FileData(File.ReadAllBytes(inputDataFile));
+
+            var prediction = predictionEngine.Predict(fileData);
 
             Console.WriteLine(
-                $"Based on input file:{Environment.NewLine}" +
-                $"{inputDataFile}{Environment.NewLine}{Environment.NewLine}" +
-                $"The file is predicted to be a {(FileTypes) (prediction.PredictedClusterId - 1)}{Environment.NewLine}");
+                $"Based on input file: {inputDataFile}{Environment.NewLine}{Environment.NewLine}" +
+                $"Feature Extraction: {fileData.ToString()}{Environment.NewLine}{Environment.NewLine}" +
+                $"The file is predicted to be a {(FileTypes) (prediction.PredictedClusterId)}{Environment.NewLine}");
 
             Console.WriteLine("Distances from all clusters:");
 

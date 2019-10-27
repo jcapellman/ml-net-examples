@@ -9,11 +9,7 @@ namespace chapter05.ML.Objects
     {
         public FileData(Span<byte> data, string fileName = null)
         {
-            if (string.IsNullOrEmpty(fileName))
-            {
-                Label = (float) FileTypes.Unknown;
-            }
-            else
+            if (!string.IsNullOrEmpty(fileName))
             {
                 if (fileName.Contains("ps1"))
                 {
@@ -25,32 +21,28 @@ namespace chapter05.ML.Objects
                 {
                     Label = (float) FileTypes.Document;
                 }
-                else
-                {
-                    Label = (float) FileTypes.Unknown;
-                }
             }
 
-            Size = data.Length;
+            IsText = HasBinaryContent(data) ? 0.0f : 1.0f;
 
-            Header = Avg(data.Slice(0, (int) (data.Length >= 200 ? 200 : Size)));
+            IsMZHeader = HasHeaderBytes(data.Slice(0, 2), "MZ") ? 1.0f : 0.0f;
 
-            IsText = HasBinaryContent(data) ? 1.0f : 0.0f;
+            IsPKHeader = HasHeaderBytes(data.Slice(0, 2), "PK") ? 1.0f : 0.0f;
         }
 
-        private static float Avg(Span<byte> span) => (float) span.ToArray().Average(a => a);
+        public static bool HasBinaryContent(Span<byte> fileContent) =>
+            System.Text.Encoding.UTF8.GetString(fileContent.ToArray()).Any(a => char.IsControl(a) && a != '\r' && a != '\n');
 
-        public static bool HasBinaryContent(Span<byte> fileContent) => 
-            BitConverter.ToString(fileContent.ToArray()).Any(a => char.IsControl(a) && a != '\r' && a != '\n' && a != '\t');
+        public static bool HasHeaderBytes(Span<byte> data, string match) => System.Text.Encoding.UTF8.GetString(data) == match;
 
         public float Label { get; set; }
 
-        public float Size { get; set; }
-
-        public float Header { get; set; }
-
         public float IsText { get; set; }
 
-        public override string ToString() => $"{Label},{Size},{Header},{IsText}";
+        public float IsMZHeader { get; set; }
+
+        public float IsPKHeader { get; set; }
+
+        public override string ToString() => $"{Label},{IsText},{IsMZHeader},{IsPKHeader}";
     }
 }

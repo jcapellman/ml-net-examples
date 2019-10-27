@@ -30,19 +30,19 @@ namespace chapter05.ML
                 columns: new[]
                 {
                     new TextLoader.Column(nameof(FileData.Label), DataKind.Single, 0),
-                    new TextLoader.Column(nameof(FileData.Size), DataKind.Single, 1),
-                    new TextLoader.Column(nameof(FileData.Header), DataKind.Single, 2),
-                    new TextLoader.Column(nameof(FileData.IsText), DataKind.Single, 3)
+                    new TextLoader.Column(nameof(FileData.IsText), DataKind.Single, 1),
+                    new TextLoader.Column(nameof(FileData.IsMZHeader), DataKind.Single, 2),
+                    new TextLoader.Column(nameof(FileData.IsPKHeader), DataKind.Single, 3)
                 },
                 hasHeader: true,
                 separatorChar: ',');
 
             var dataProcessPipeline = MlContext.Transforms.Concatenate(
                 FEATURES,
-                nameof(FileData.Size), 
-                nameof(FileData.Header),
-                nameof(FileData.IsText));
-
+                nameof(FileData.IsText),
+                nameof(FileData.IsMZHeader),
+                nameof(FileData.IsPKHeader));
+            
             var trainer = MlContext.Clustering.Trainers.KMeans(featureColumnName: FEATURES, numberOfClusters: 3);
             var trainingPipeline = dataProcessPipeline.Append(trainer);
             var trainedModel = trainingPipeline.Fit(trainingDataView);
@@ -53,9 +53,9 @@ namespace chapter05.ML
                 columns: new[]
                 {
                     new TextLoader.Column(nameof(FileData.Label), DataKind.Single, 0),
-                    new TextLoader.Column(nameof(FileData.Size), DataKind.Single, 1),
-                    new TextLoader.Column(nameof(FileData.Header), DataKind.Single, 2),
-                    new TextLoader.Column(nameof(FileData.IsText), DataKind.Single, 3)
+                    new TextLoader.Column(nameof(FileData.IsText), DataKind.Single, 1),
+                    new TextLoader.Column(nameof(FileData.IsMZHeader), DataKind.Single, 2),
+                    new TextLoader.Column(nameof(FileData.IsPKHeader), DataKind.Single, 3)
                 },
                 hasHeader: true,
                 separatorChar: ',');
@@ -64,6 +64,7 @@ namespace chapter05.ML
 
             var modelMetrics = MlContext.Clustering.Evaluate(
                 data: testDataView,
+                labelColumnName: "Label",
                 scoreColumnName: "Score",
                 featureColumnName: FEATURES);
 

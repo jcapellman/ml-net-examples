@@ -4,7 +4,6 @@
     {
         Executable = 0,
         Document = 1,
-        Script = 2,
-        Unknown = 3
+        Script = 2
     }
 }
