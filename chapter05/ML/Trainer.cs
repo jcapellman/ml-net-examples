@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+
 using chapter05.ML.Base;
 using chapter05.ML.Objects;
 
@@ -10,7 +10,21 @@ namespace chapter05.ML
 {
     public class Trainer : BaseML
     {
-        public void Train(string trainingFileName, string testFileName)
+        private IDataView GetDataView(string fileName)
+        {
+            return MlContext.Data.LoadFromTextFile(path: fileName,
+                columns: new[]
+                {
+                    new TextLoader.Column(nameof(FileData.Label), DataKind.Single, 0),
+                    new TextLoader.Column(nameof(FileData.IsBinary), DataKind.Single, 1),
+                    new TextLoader.Column(nameof(FileData.IsMZHeader), DataKind.Single, 2),
+                    new TextLoader.Column(nameof(FileData.IsPKHeader), DataKind.Single, 3)
+                },
+                hasHeader: false,
+                separatorChar: ',');
+        }
+
+        public void Train(string trainingFileName, string testingFileName)
         {
             if (!System.IO.File.Exists(trainingFileName))
             {
@@ -19,23 +33,14 @@ namespace chapter05.ML
                 return;
             }
 
-            if (!System.IO.File.Exists(testFileName))
+            if (!System.IO.File.Exists(testingFileName))
             {
-                Console.WriteLine($"Failed to find test data file ({testFileName}");
+                Console.WriteLine($"Failed to find test data file ({testingFileName}");
 
                 return;
             }
 
-            var trainingDataView = MlContext.Data.LoadFromTextFile(path: trainingFileName,
-                columns: new[]
-                {
-                    new TextLoader.Column(nameof(FileData.Label), DataKind.Single, 0),
-                    new TextLoader.Column(nameof(FileData.IsBinary), DataKind.Single, 1),
-                    new TextLoader.Column(nameof(FileData.IsMZHeader), DataKind.Single, 2),
-                    new TextLoader.Column(nameof(FileData.IsPKHeader), DataKind.Single, 3)
-                },
-                hasHeader: true,
-                separatorChar: ',');
+            var trainingDataView = GetDataView(trainingFileName);
 
             var dataProcessPipeline = MlContext.Transforms.Concatenate(
                 FEATURES,
@@ -49,20 +54,11 @@ namespace chapter05.ML
 
             MlContext.Model.Save(trainedModel, trainingDataView.Schema, ModelPath);
 
-            var testingDataView = MlContext.Data.LoadFromTextFile(path: testFileName,
-                columns: new[]
-                {
-                    new TextLoader.Column(nameof(FileData.Label), DataKind.Single, 0),
-                    new TextLoader.Column(nameof(FileData.IsBinary), DataKind.Single, 1),
-                    new TextLoader.Column(nameof(FileData.IsMZHeader), DataKind.Single, 2),
-                    new TextLoader.Column(nameof(FileData.IsPKHeader), DataKind.Single, 3)
-                },
-                hasHeader: true,
-                separatorChar: ',');
+            var testingDataView = GetDataView(testingFileName);
 
             IDataView testDataView = trainedModel.Transform(testingDataView);
 
-            var modelMetrics = MlContext.Clustering.Evaluate(
+            ClusteringMetrics modelMetrics = MlContext.Clustering.Evaluate(
                 data: testDataView,
                 labelColumnName: "Label",
                 scoreColumnName: "Score",
