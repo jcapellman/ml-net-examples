@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using chapter05.ML.Base;
 using chapter05.ML.Objects;
 
@@ -30,7 +30,7 @@ namespace chapter05.ML
                 columns: new[]
                 {
                     new TextLoader.Column(nameof(FileData.Label), DataKind.Single, 0),
-                    new TextLoader.Column(nameof(FileData.IsText), DataKind.Single, 1),
+                    new TextLoader.Column(nameof(FileData.IsBinary), DataKind.Single, 1),
                     new TextLoader.Column(nameof(FileData.IsMZHeader), DataKind.Single, 2),
                     new TextLoader.Column(nameof(FileData.IsPKHeader), DataKind.Single, 3)
                 },
@@ -39,7 +39,7 @@ namespace chapter05.ML
 
             var dataProcessPipeline = MlContext.Transforms.Concatenate(
                 FEATURES,
-                nameof(FileData.IsText),
+                nameof(FileData.IsBinary),
                 nameof(FileData.IsMZHeader),
                 nameof(FileData.IsPKHeader));
             
@@ -53,7 +53,7 @@ namespace chapter05.ML
                 columns: new[]
                 {
                     new TextLoader.Column(nameof(FileData.Label), DataKind.Single, 0),
-                    new TextLoader.Column(nameof(FileData.IsText), DataKind.Single, 1),
+                    new TextLoader.Column(nameof(FileData.IsBinary), DataKind.Single, 1),
                     new TextLoader.Column(nameof(FileData.IsMZHeader), DataKind.Single, 2),
                     new TextLoader.Column(nameof(FileData.IsPKHeader), DataKind.Single, 3)
                 },
