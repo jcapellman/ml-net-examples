@@ -4,6 +4,7 @@ using chapter05.ML.Base;
 using chapter05.ML.Objects;
 
 using Microsoft.ML;
+using Microsoft.ML.Data;
 
 namespace chapter05.ML
 {
@@ -25,20 +26,46 @@ namespace chapter05.ML
                 return;
             }
 
-            var trainingDataView = MlContext.Data.LoadFromTextFile<FileData>(trainingFileName, ',', hasHeader: false);
+            var trainingDataView = MlContext.Data.LoadFromTextFile(path: trainingFileName,
+                columns: new[]
+                {
+                    new TextLoader.Column(nameof(FileData.Label), DataKind.Single, 0),
+                    new TextLoader.Column(nameof(FileData.Size), DataKind.Single, 1),
+                    new TextLoader.Column(nameof(FileData.Header), DataKind.Single, 2),
+                    new TextLoader.Column(nameof(FileData.IsText), DataKind.Single, 3)
+                },
+                hasHeader: true,
+                separatorChar: ',');
 
-            var dataProcessPipeline = MlContext.Transforms
-                .Concatenate(FEATURES, nameof(FileData.Size), nameof(FileData.Size), nameof(FileData.Header))
-                .Append(MlContext.Clustering.Trainers.KMeans(FEATURES, numberOfClusters: 3));
+            var dataProcessPipeline = MlContext.Transforms.Concatenate(
+                FEATURES,
+                nameof(FileData.Size), 
+                nameof(FileData.Header),
+                nameof(FileData.IsText));
 
-            var trainedModel = dataProcessPipeline.Fit(trainingDataView);
+            var trainer = MlContext.Clustering.Trainers.KMeans(featureColumnName: FEATURES, numberOfClusters: 3);
+            var trainingPipeline = dataProcessPipeline.Append(trainer);
+            var trainedModel = trainingPipeline.Fit(trainingDataView);
+
             MlContext.Model.Save(trainedModel, trainingDataView.Schema, ModelPath);
 
-            var testDataView = MlContext.Data.LoadFromTextFile<FileData>(testFileName, ',', hasHeader: false);
+            var testingDataView = MlContext.Data.LoadFromTextFile(path: testFileName,
+                columns: new[]
+                {
+                    new TextLoader.Column(nameof(FileData.Label), DataKind.Single, 0),
+                    new TextLoader.Column(nameof(FileData.Size), DataKind.Single, 1),
+                    new TextLoader.Column(nameof(FileData.Header), DataKind.Single, 2),
+                    new TextLoader.Column(nameof(FileData.IsText), DataKind.Single, 3)
+                },
+                hasHeader: true,
+                separatorChar: ',');
 
-            var modelMetrics = MlContext.Clustering.Evaluate(data: testDataView,
-                labelColumnName: FEATURES,
-                scoreColumnName: nameof(FileTypePrediction.Distances));
+            IDataView testDataView = trainedModel.Transform(testingDataView);
+
+            var modelMetrics = MlContext.Clustering.Evaluate(
+                data: testDataView,
+                scoreColumnName: "Score",
+                featureColumnName: FEATURES);
 
             Console.WriteLine($"Average Distance: {modelMetrics.AverageDistance}");
             Console.WriteLine($"Davies Bould Index: {modelMetrics.DaviesBouldinIndex}");

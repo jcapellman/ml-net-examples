@@ -11,6 +11,9 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="TestData - Copy\" />
+    <Folder Include="TestData\" />
+    <Folder Include="TrainingData\" />
   </ItemGroup>
 
 </Project>

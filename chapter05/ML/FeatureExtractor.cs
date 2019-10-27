@@ -9,22 +9,35 @@ namespace chapter05.ML
 {
     public class FeatureExtractor : BaseML
     {
-        public void Extract(string folderPath)
+        private void ExtractFolder(string folderPath, string outputFile)
         {
+            if (!Directory.Exists(folderPath))
+            {
+                Console.WriteLine($"{folderPath} does not exist");
+
+                return;
+            }
+
             var files = Directory.GetFiles(folderPath);
 
             using (var streamWriter =
-                new StreamWriter(Path.Combine(AppContext.BaseDirectory, $"../../../Data/{Constants.SAMPLE_DATA}")))
+                new StreamWriter(Path.Combine(AppContext.BaseDirectory, $"../../../Data/{outputFile}")))
             {
                 foreach (var file in files)
                 {
-                    var extractedData = new FileData(File.ReadAllBytes(file));
+                    var extractedData = new FileData(File.ReadAllBytes(file), file);
 
-                    streamWriter.WriteLine($"{file[0]},{extractedData.Header},{extractedData.Size}");
+                    streamWriter.WriteLine(extractedData.ToString());
                 }
             }
 
-            Console.WriteLine($"Extracted {files.Length} to {Constants.SAMPLE_DATA}");
+            Console.WriteLine($"Extracted {files.Length} to {outputFile}");
+        }
+
+        public void Extract(string trainingPath, string testPath)
+        {
+            ExtractFolder(trainingPath, Constants.SAMPLE_DATA);
+            ExtractFolder(testPath, Constants.TEST_DATA);
         }
     }
 }

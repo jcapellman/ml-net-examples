@@ -14,7 +14,7 @@ namespace chapter05
                                   $"predict <path to input file>{Environment.NewLine}" +
                                   $"or {Environment.NewLine}" +
                                   $"train <path to training data file> <path to test data file>{Environment.NewLine}" +
-                                  $"or {Environment.NewLine}" + $"extract <path to folder>{Environment.NewLine}");
+                                  $"or {Environment.NewLine}" + $"extract <path to training folder> <path to test folder>{Environment.NewLine}");
 
                 return;
             }
@@ -22,7 +22,7 @@ namespace chapter05
             switch (args[0])
             {
                 case "extract":
-                    new FeatureExtractor().Extract(args[1]);
+                    new FeatureExtractor().Extract(args[1], args[2]);
                     break;
                 case "predict":
                     new Predictor().Predict(args[1]);

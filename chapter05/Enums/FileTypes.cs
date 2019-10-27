@@ -2,8 +2,9 @@
 {
     public enum FileTypes
     {
-        Windows_PE = 0,
+        Executable = 0,
         Document = 1,
-        Audio = 2
+        Script = 2,
+        Unknown = 3
     }
 }

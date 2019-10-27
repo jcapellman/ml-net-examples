@@ -46,9 +46,15 @@ namespace chapter05.ML
             var prediction = predictionEngine.Predict(new FileData(File.ReadAllBytes(inputDataFile)));
 
             Console.WriteLine(
-                                $"Based on input file:{System.Environment.NewLine}" +
-                                $"{inputDataFile}{Environment.NewLine}{Environment.NewLine}" + 
-                                $"The file is predicted to be a {(FileTypes)prediction .PredictedClusterId} deal, with {string.Join(",", prediction.Distances)} distances to other clusters");
+                $"Based on input file:{Environment.NewLine}" +
+                $"{inputDataFile}{Environment.NewLine}{Environment.NewLine}" +
+                $"The file is predicted to be a {(FileTypes) (prediction.PredictedClusterId - 1)}{Environment.NewLine}");
+
+            Console.WriteLine("Distances from all clusters:");
+
+            for (var x = 0; x < prediction.Distances.Length; x++) { 
+                Console.WriteLine($"{(FileTypes)x}: {prediction.Distances[x]}");
+            }
         }
     }
 }
