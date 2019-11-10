@@ -1,8 +1,8 @@
 ﻿using System;
 
-using chapter04.ML;
+using chapter06.ML;
 
-namespace chapter04
+namespace chapter06
 {
     class Program
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 
-using chapter04.Common;
+using chapter06.Common;
 
 using Microsoft.ML;
 
-namespace chapter04.ML.Base
+namespace chapter06.ML.Base
 {
     public class BaseML
     {

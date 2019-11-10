@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
 
-using chapter04.Common;
-using chapter04.ML.Base;
-using chapter04.ML.Objects;
+using chapter06.Common;
+using chapter06.ML.Base;
+using chapter06.ML.Objects;
 
 using Microsoft.ML;
 using Microsoft.ML.Trainers;
 
-namespace chapter04.ML
+namespace chapter06.ML
 {
     public class Trainer : BaseML
     {
@@ -21,13 +21,13 @@ namespace chapter04.ML
                 return;
             }
 
-            var trainingDataView = MlContext.Data.LoadFromTextFile<CarInventory>(trainingFileName, ',');
+            var trainingDataView = MlContext.Data.LoadFromTextFile<LoginHistory>(trainingFileName, ',');
 
             var dataSplit = MlContext.Data.TrainTestSplit(trainingDataView, testFraction: 0.4);
 
-            var dataProcessPipeline = MlContext.Transforms.CopyColumns("Label", nameof(CarInventory.Label))
+            var dataProcessPipeline = MlContext.Transforms.CopyColumns("Label", nameof(LoginHistory.Label))
                 .Append(MlContext.Transforms.Concatenate("Features",
-                    typeof(CarInventory).ToPropertyList<CarInventory>(nameof(CarInventory.Label))));
+                    typeof(LoginHistory).ToPropertyList<LoginHistory>(nameof(LoginHistory.Label))));
 
             var options = new RandomizedPcaTrainer.Options
             {
@@ -49,9 +49,9 @@ namespace chapter04.ML
             var testSetTransform = trainedModel.Transform(dataSplit.TestSet);
 
             var modelMetrics = MlContext.AnomalyDetection.Evaluate(testSetTransform, 
-                labelColumnName: nameof(CarInventoryPrediction.Label), 
-                scoreColumnName: nameof(CarInventoryPrediction.Score),
-                predictedLabelColumnName: nameof(CarInventoryPrediction.PredictedLabel));
+                labelColumnName: nameof(LoginPrediction.Label), 
+                scoreColumnName: nameof(LoginPrediction.Score),
+                predictedLabelColumnName: nameof(LoginPrediction.PredictedLabel));
 
             Console.WriteLine($"Area Under Curve: {modelMetrics.AreaUnderRocCurve:P2}{Environment.NewLine}" +
                               $"Detection at FP Count: {modelMetrics.DetectionRateAtFalsePositiveCount}");

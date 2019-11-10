@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace chapter04.Common
+namespace chapter06.Common
 {
     public static class ExtensionMethods
     {

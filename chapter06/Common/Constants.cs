@@ -1,7 +1,7 @@
-﻿namespace chapter04.Common
+﻿namespace chapter06.Common
 {
     public class Constants
     {
-        public const string MODEL_FILENAME = "chapter4.mdl";
+        public const string MODEL_FILENAME = "chapter6.mdl";
     }
 }
