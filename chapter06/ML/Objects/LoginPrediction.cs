@@ -1,10 +1,11 @@
-﻿using Microsoft.ML.Data;
-
-namespace chapter06.ML.Objects
+﻿namespace chapter06.ML.Objects
 {
     public class LoginPrediction
     {
-        [VectorType(3)]
-        public double[] Prediction { get; set; }
+        public float Label;
+
+        public float Score;
+
+        public bool PredictedLabel;
     }
 }

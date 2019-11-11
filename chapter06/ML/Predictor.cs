@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
 
-using chapter04.ML.Base;
-using chapter04.ML.Objects;
+using chapter06.ML.Base;
+using chapter06.ML.Objects;
 
 using Microsoft.ML;
 
 using Newtonsoft.Json;
 
-namespace chapter04.ML
+namespace chapter06.ML
 {
     public class Predictor : BaseML
     {
@@ -42,16 +42,16 @@ namespace chapter04.ML
                 return;
             }
 
-            var predictionEngine = MlContext.Model.CreatePredictionEngine<CarInventory, CarInventoryPrediction>(mlModel);
+            var predictionEngine = MlContext.Model.CreatePredictionEngine<LoginHistory, LoginPrediction>(mlModel);
 
             var json = File.ReadAllText(inputDataFile);
 
-            var prediction = predictionEngine.Predict(JsonConvert.DeserializeObject<CarInventory>(json));
+            var prediction = predictionEngine.Predict(JsonConvert.DeserializeObject<LoginHistory>(json));
 
             Console.WriteLine(
                                 $"Based on input json:{System.Environment.NewLine}" +
                                 $"{json}{System.Environment.NewLine}" + 
-                                $"The car price is a {(prediction.Label ? "good" : "bad")} deal, with a {prediction.Probability:P0} confidence");
+                                $"The login history is {(prediction.PredictedLabel ? "abnormal" : "normal")}, with a {prediction.Score:F2} outlier score");
         }
     }
 }
