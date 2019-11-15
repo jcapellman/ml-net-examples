@@ -42,11 +42,11 @@ namespace chapter06.ML
                 return;
             }
 
-            var predictionEngine = MlContext.Model.CreatePredictionEngine<LoginHistory, LoginPrediction>(mlModel);
+            var predictionEngine = MlContext.Model.CreatePredictionEngine<NetworkTrafficHistory, NetworkTrafficPrediction>(mlModel);
 
             var json = File.ReadAllText(inputDataFile);
 
-            var prediction = predictionEngine.Predict(JsonConvert.DeserializeObject<LoginHistory>(json));
+            var prediction = predictionEngine.Predict(JsonConvert.DeserializeObject<NetworkTrafficHistory>(json));
 
             Console.WriteLine(
                                 $"Based on input json:{System.Environment.NewLine}" +

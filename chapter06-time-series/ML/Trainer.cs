@@ -1,33 +1,22 @@
 ﻿using System;
 using System.IO;
 
-using chapter06.Common;
 using chapter06.ML.Base;
 using chapter06.ML.Objects;
 
 using Microsoft.ML;
-using Microsoft.ML.Data;
-using Microsoft.ML.Trainers;
 
 namespace chapter06.ML
 {
     public class Trainer : BaseML
     {
-        private (IDataView DataView, IEstimator<ITransformer> Transformer) GetDataView(string fileName, bool training = true)
-        {
-            var trainingDataView = MlContext.Data.LoadFromTextFile<LoginHistory>(fileName, ',');
+        private const int PvalueHistoryLength = 30;
+        private const int SeasonalityWindowSize = 30;
+        private const int TrainingWindowSize = 90;
+        private const int Confidence = 98;
 
-            if (!training)
-            {
-                return (trainingDataView, null);
-            }
-
-            IEstimator<ITransformer> dataProcessPipeline = MlContext.Transforms.Concatenate(
-                FEATURES, 
-                typeof(LoginHistory).ToPropertyList<LoginHistory>(nameof(LoginHistory.Label)));
-
-            return (trainingDataView, dataProcessPipeline);
-        }
+        private IDataView GetDataView(string fileName, bool training = true) => 
+            MlContext.Data.LoadFromTextFile<NetworkTrafficHistory>(fileName, separatorChar: ',', hasHeader: false);
 
         public void Train(string trainingFileName, string testingFileName)
         {
@@ -47,27 +36,21 @@ namespace chapter06.ML
 
             var trainingDataView = GetDataView(trainingFileName);
 
-            var options = new RandomizedPcaTrainer.Options
-            {
-                FeatureColumnName = FEATURES,
-                ExampleWeightColumnName = null,
-                Rank = 5,
-                Oversampling = 20,
-                EnsureZeroMean = true,
-                Seed = 1
-            };
+            var trainingPipeLine = MlContext.Transforms.DetectSpikeBySsa(
+                nameof(NetworkTrafficPrediction.Prediction),
+                nameof(NetworkTrafficHistory.BytesTransferred),
+                confidence: Confidence,
+                pvalueHistoryLength: PvalueHistoryLength,
+                trainingWindowSize: TrainingWindowSize,
+                seasonalityWindowSize: SeasonalityWindowSize);
 
-            IEstimator<ITransformer> trainer = MlContext.AnomalyDetection.Trainers.RandomizedPca(options: options);
+            ITransformer trainedModel = trainingPipeLine.Fit(trainingDataView);
 
-            EstimatorChain<ITransformer> trainingPipeline = trainingDataView.Transformer.Append(trainer);
-
-            TransformerChain<ITransformer> trainedModel = trainingPipeline.Fit(trainingDataView.DataView);
-
-            MlContext.Model.Save(trainedModel, trainingDataView.DataView.Schema, ModelPath);
+            MlContext.Model.Save(trainedModel, trainingDataView.Schema, ModelPath);
 
             var testingDataView = GetDataView(testingFileName, true);
 
-            var testSetTransform = trainedModel.Transform(testingDataView.DataView);
+            var testSetTransform = trainedModel.Transform(testingDataView);
 
             var modelMetrics = MlContext.AnomalyDetection.Evaluate(testSetTransform);
 
