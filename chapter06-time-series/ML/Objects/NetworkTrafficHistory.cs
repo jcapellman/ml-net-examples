@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Microsoft.ML.Data;
 
 namespace chapter06.ML.Objects

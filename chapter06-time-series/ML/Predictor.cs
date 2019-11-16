@@ -5,8 +5,7 @@ using chapter06.ML.Base;
 using chapter06.ML.Objects;
 
 using Microsoft.ML;
-
-using Newtonsoft.Json;
+using Microsoft.ML.Transforms.TimeSeries;
 
 namespace chapter06.ML
 {
@@ -28,12 +27,7 @@ namespace chapter06.ML
                 return;
             }
 
-            ITransformer mlModel;
-            
-            using (var stream = new FileStream(ModelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                mlModel = MlContext.Model.Load(stream, out _);
-            }
+            ITransformer mlModel = MlContext.Model.Load(ModelPath, out var modelInputSchema);
 
             if (mlModel == null)
             {
@@ -42,16 +36,22 @@ namespace chapter06.ML
                 return;
             }
 
-            var predictionEngine = MlContext.Model.CreatePredictionEngine<NetworkTrafficHistory, NetworkTrafficPrediction>(mlModel);
+            var predictionEngine = mlModel.CreateTimeSeriesEngine<NetworkTrafficHistory, NetworkTrafficPrediction>(MlContext);
 
-            var json = File.ReadAllText(inputDataFile);
+            var inputData =
+                MlContext.Data.LoadFromTextFile<NetworkTrafficHistory>(inputDataFile, separatorChar: ',');
 
-            var prediction = predictionEngine.Predict(JsonConvert.DeserializeObject<NetworkTrafficHistory>(json));
+            var rows = MlContext.Data.CreateEnumerable<NetworkTrafficHistory>(inputData, false);
 
-            Console.WriteLine(
-                                $"Based on input json:{System.Environment.NewLine}" +
-                                $"{json}{System.Environment.NewLine}" + 
-                                $"The login history is {(prediction.PredictedLabel ? "abnormal" : "normal")}, with a {prediction.Score:F2} outlier score");
+            Console.WriteLine($"Based on input file ({inputDataFile}):");
+
+            foreach (var row in rows)
+            {
+                var prediction = predictionEngine.Predict(row);
+
+                Console.Write($"HOST: {row.HostMachine} TIMESTAMP: {row.Timestamp} TRANSFER: {row.BytesTransferred} ");
+                Console.Write($"ALERT: {prediction.Prediction[0]} SCORE: {prediction.Prediction[1]:f2} P-VALUE: {prediction.Prediction[2]:F2}{Environment.NewLine}");
+            }
         }
     }
 }
