@@ -65,7 +65,7 @@ namespace chapter07.ML
 
             MlContext.Model.Save(trainedModel, trainingDataView.DataView.Schema, ModelPath);
 
-            Console.WriteLine($"Model saved to {ModelPath}");
+            Console.WriteLine($"Model saved to {ModelPath}{Environment.NewLine}");
 
             var testingDataView = GetDataView(testingFileName, true);
 
@@ -73,11 +73,12 @@ namespace chapter07.ML
 
             var modelMetrics = MlContext.Recommendation().Evaluate(testSetTransform);
 
-            Console.WriteLine($"Loss Function: {modelMetrics.LossFunction:P2}{Environment.NewLine}" +
-                              $"Mean Absolute Error: {modelMetrics.MeanAbsoluteError:P2}{Environment.NewLine}" +
-                              $"Mean Squared Error: {modelMetrics.MeanSquaredError:P2}{Environment.NewLine}" +
-                              $"R Squared: {modelMetrics.RSquared:P2}{Environment.NewLine}" +
-                              $"Root Mean Squared Error: {modelMetrics.RootMeanSquaredError:P2}");
+            Console.WriteLine($"Matrix Factorization Evaluation:{Environment.NewLine}{Environment.NewLine}" +
+                              $"Loss Function: {modelMetrics.LossFunction}{Environment.NewLine}" +
+                              $"Mean Absolute Error: {modelMetrics.MeanAbsoluteError}{Environment.NewLine}" +
+                              $"Mean Squared Error: {modelMetrics.MeanSquaredError}{Environment.NewLine}" +
+                              $"R Squared: {modelMetrics.RSquared}{Environment.NewLine}" +
+                              $"Root Mean Squared Error: {modelMetrics.RootMeanSquaredError}");
         }
     }
 }
