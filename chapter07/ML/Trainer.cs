@@ -55,7 +55,8 @@ namespace chapter07.ML
                 MatrixRowIndexColumnName = MovieIDEncoding,
                 LabelColumnName = "Label",
                 NumberOfIterations = 20,
-                ApproximationRank = 10
+                ApproximationRank = 10,
+                Quiet = false
             };
 
             var trainerEstimator = trainingDataView.Transformer.Append(MlContext.Recommendation().Trainers.MatrixFactorization(options));
@@ -63,6 +64,8 @@ namespace chapter07.ML
             ITransformer trainedModel = trainerEstimator.Fit(trainingDataView.DataView);
 
             MlContext.Model.Save(trainedModel, trainingDataView.DataView.Schema, ModelPath);
+
+            Console.WriteLine($"Model saved to {ModelPath}");
 
             var testingDataView = GetDataView(testingFileName, true);
 
