@@ -13,7 +13,7 @@ namespace chapter07.ML
     {
         private const string UserIDEncoding = "UserIDEncoding";
 
-        private const string MovieIDEncoding = "MovieIDEncoding";
+        private const string MusicIDEncoding = "MusicIDEncoding";
 
         private (IDataView DataView, IEstimator<ITransformer> Transformer) GetDataView(string fileName, bool training = true)
         {
@@ -24,9 +24,11 @@ namespace chapter07.ML
                 return (trainingDataView, null);
             }
 
-            IEstimator<ITransformer> dataProcessPipeline = 
-                MlContext.Transforms.Conversion.MapValueToKey(outputColumnName: UserIDEncoding, inputColumnName: nameof(MusicRating.UserID))
-                .Append(MlContext.Transforms.Conversion.MapValueToKey(outputColumnName: MovieIDEncoding, inputColumnName: nameof(MusicRating.MovieID)));
+            IEstimator<ITransformer> dataProcessPipeline =
+                MlContext.Transforms.Conversion.MapValueToKey(outputColumnName: UserIDEncoding,
+                        inputColumnName: nameof(MusicRating.UserID))
+                    .Append(MlContext.Transforms.Conversion.MapValueToKey(outputColumnName: MusicIDEncoding,
+                        inputColumnName: nameof(MusicRating.MusicID)));
 
             return (trainingDataView, dataProcessPipeline);
         }
@@ -52,16 +54,16 @@ namespace chapter07.ML
             var options = new MatrixFactorizationTrainer.Options
             {
                 MatrixColumnIndexColumnName = UserIDEncoding,
-                MatrixRowIndexColumnName = MovieIDEncoding,
+                MatrixRowIndexColumnName = MusicIDEncoding,
                 LabelColumnName = "Label",
                 NumberOfIterations = 20,
                 ApproximationRank = 10,
                 Quiet = false
             };
 
-            var trainerEstimator = trainingDataView.Transformer.Append(MlContext.Recommendation().Trainers.MatrixFactorization(options));
+            var trainingPipeLine = trainingDataView.Transformer.Append(MlContext.Recommendation().Trainers.MatrixFactorization(options));
 
-            ITransformer trainedModel = trainerEstimator.Fit(trainingDataView.DataView);
+            ITransformer trainedModel = trainingPipeLine.Fit(trainingDataView.DataView);
 
             MlContext.Model.Save(trainedModel, trainingDataView.DataView.Schema, ModelPath);
 
@@ -74,11 +76,11 @@ namespace chapter07.ML
             var modelMetrics = MlContext.Recommendation().Evaluate(testSetTransform);
 
             Console.WriteLine($"Matrix Factorization Evaluation:{Environment.NewLine}{Environment.NewLine}" +
-                              $"Loss Function: {modelMetrics.LossFunction}{Environment.NewLine}" +
-                              $"Mean Absolute Error: {modelMetrics.MeanAbsoluteError}{Environment.NewLine}" +
-                              $"Mean Squared Error: {modelMetrics.MeanSquaredError}{Environment.NewLine}" +
-                              $"R Squared: {modelMetrics.RSquared}{Environment.NewLine}" +
-                              $"Root Mean Squared Error: {modelMetrics.RootMeanSquaredError}");
+                              $"Loss Function: {modelMetrics.LossFunction:F3}{Environment.NewLine}" +
+                              $"Mean Absolute Error: {modelMetrics.MeanAbsoluteError:F3}{Environment.NewLine}" +
+                              $"Mean Squared Error: {modelMetrics.MeanSquaredError:F3}{Environment.NewLine}" +
+                              $"R Squared: {modelMetrics.RSquared:F3}{Environment.NewLine}" +
+                              $"Root Mean Squared Error: {modelMetrics.RootMeanSquaredError:F3}");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-
+using chapter07.Common;
 using chapter07.ML.Base;
 using chapter07.ML.Objects;
 
@@ -29,7 +30,7 @@ namespace chapter07.ML
             }
 
             ITransformer mlModel;
-            
+
             using (var stream = new FileStream(ModelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 mlModel = MlContext.Model.Load(stream, out _);
@@ -46,12 +47,14 @@ namespace chapter07.ML
 
             var json = File.ReadAllText(inputDataFile);
 
-            var prediction = predictionEngine.Predict(JsonConvert.DeserializeObject<MusicRating>(json));
+            var rating = JsonConvert.DeserializeObject<MusicRating>(json);
+
+            var prediction = predictionEngine.Predict(rating);
 
             Console.WriteLine(
-                                $"Based on input json:{System.Environment.NewLine}" +
-                                $"{json}{System.Environment.NewLine}" +
-                                $"The music rating is {prediction.Label}, with a {prediction.Score:F2} outlier score");
+                $"Based on input:{System.Environment.NewLine}" +
+                $"Label: {rating.Label} | MusicID: {rating.MusicID} | UserID: {rating.UserID}{System.Environment.NewLine}" +
+                $"The music is {(prediction.Score > Constants.SCORE_THRESHOLD ? "recommended" : "not recommended")}");
         }
     }
 }
