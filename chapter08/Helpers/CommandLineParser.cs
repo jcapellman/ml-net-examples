@@ -16,7 +16,7 @@ namespace chapter08.Helpers
             {
                 Console.WriteLine("No arguments passed in - using defaults");
 
-                return default;
+                return Activator.CreateInstance<T>();
             }
 
             if (args.Length % 2 != 0)
