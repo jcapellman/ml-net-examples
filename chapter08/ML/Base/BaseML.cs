@@ -1,17 +1,10 @@
-﻿using System;
-using System.IO;
-
-using chapter08.Common;
-
-using Microsoft.ML;
+﻿using Microsoft.ML;
 
 namespace chapter08.ML.Base
 {
     public class BaseML
     {
         protected const string FEATURES = "Features";
-
-        protected static string ModelPath => Path.Combine(AppContext.BaseDirectory, Constants.MODEL_FILENAME);
 
         protected readonly MLContext MlContext;
 

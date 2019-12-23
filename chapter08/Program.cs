@@ -1,34 +1,30 @@
 ﻿using System;
 
+using chapter08.Enums;
+using chapter08.Helpers;
 using chapter08.ML;
+using chapter08.Objects;
 
 namespace chapter08
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            if (args.Length < 2)
-            {
-                Console.WriteLine($"Invalid arguments passed in, exiting.{Environment.NewLine}{Environment.NewLine}Usage:{Environment.NewLine}" +
-                                  $"predict <path to input file>{Environment.NewLine}" +
-                                  $"or {Environment.NewLine}" +
-                                  $"train <path to training data file> <path to test data file>{Environment.NewLine}" +
-                                  $"or {Environment.NewLine}" + $"extract <path to training folder> <path to test folder>{Environment.NewLine}");
+            Console.Clear();
 
-                return;
-            }
+            var arguments = CommandLineParser.ParseArguments<ProgramArguments>(args);
 
-            switch (args[0])
+            switch (arguments.Action)
             {
-                case "predict":
-                    new Predictor().Predict(args[1]);
+                case ProgramActions.PREDICT:
+                    new Predictor().Predict(arguments);
                     break;
-                case "train":
-                    new Trainer().Train(args[1], args[2]);
+                case ProgramActions.TRAINING:
+                    new Trainer().Train(arguments);
                     break;
                 default:
-                    Console.WriteLine($"{args[0]} is an invalid option");
+                    Console.WriteLine($"Unhandled action {arguments.Action}");
                     break;
             }
         }

@@ -1,37 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using chapter08.Common;
+using System.Linq;
+
 using chapter08.ML.Base;
 using chapter08.ML.Objects;
+using chapter08.Objects;
 
 using Microsoft.ML;
-
-using Newtonsoft.Json;
+using Microsoft.ML.Transforms.TimeSeries;
 
 namespace chapter08.ML
 {
     public class Predictor : BaseML
     {
-        public void Predict(string inputDataFile)
+        public void Predict(ProgramArguments arguments)
         {
-            if (!File.Exists(ModelPath))
+            if (!File.Exists(arguments.ModelFileName))
             {
-                Console.WriteLine($"Failed to find model at {ModelPath}");
+                Console.WriteLine($"Failed to find model at {arguments.ModelFileName}");
 
                 return;
             }
 
-            if (!File.Exists(inputDataFile))
+            if (!File.Exists(arguments.PredictionFileName))
             {
-                Console.WriteLine($"Failed to find input data at {inputDataFile}");
+                Console.WriteLine($"Failed to find input data at {arguments.PredictionFileName}");
 
                 return;
             }
 
             ITransformer mlModel;
 
-            using (var stream = new FileStream(ModelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var stream = new FileStream(Path.Combine(AppContext.BaseDirectory, arguments.ModelFileName), FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 mlModel = MlContext.Model.Load(stream, out _);
             }
@@ -43,18 +43,17 @@ namespace chapter08.ML
                 return;
             }
 
-            var predictionEngine = MlContext.Model.CreatePredictionEngine<MusicRating, MusicPrediction>(mlModel);
+            var predictionEngine = mlModel.CreateTimeSeriesEngine<StockPrices, StockPrediction>(MlContext);
 
-            var json = File.ReadAllText(inputDataFile);
+            var stockPrices = File.ReadAllLines(arguments.PredictionFileName);
 
-            var rating = JsonConvert.DeserializeObject<MusicRating>(json);
+            foreach (var stockPrice in stockPrices)
+            {
+                var prediction = predictionEngine.Predict(new StockPrices(Convert.ToSingle(stockPrice)));
 
-            var prediction = predictionEngine.Predict(rating);
-
-            Console.WriteLine(
-                $"Based on input:{System.Environment.NewLine}" +
-                $"Label: {rating.Label} | MusicID: {rating.MusicID} | UserID: {rating.UserID}{System.Environment.NewLine}" +
-                $"The music is {(prediction.Score > Constants.SCORE_THRESHOLD ? "recommended" : "not recommended")}");
+                Console.WriteLine($"Given a stock price of ${stockPrice}, the next 5 values are predicted to be: " +
+                                  $"{string.Join(", ", prediction.StockForecast.Select(a => $"${Math.Round(a)}"))}");
+            }
         }
     }
 }
