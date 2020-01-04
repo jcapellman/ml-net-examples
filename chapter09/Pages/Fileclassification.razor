@@ -1,0 +1,27 @@
+﻿@page "/fileclassification"
+
+@using chapter09.Data
+
+@inject FileClassificationService fileClassificationService
+
+<h1>File Classification</h1>
+
+@if (responseItem == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>@responseItem.SHA1Sum></p>
+    <p>@responseItem.Confidence</p>
+    <p>@responseItem.IsMalicious</p>
+}
+
+@code {
+    FileClassificationResponseItem responseItem;
+
+    protected override async Task OnInitializedAsync()
+    {
+        responseItem = await fileClassificationService.GetFileClassificationAsync("");
+    }
+}

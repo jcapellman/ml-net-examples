@@ -1,5 +1,28 @@
 ﻿@page "/"
+@inject HttpClient client
+<h1>Upload File</h1>
 
-<h1>Hello, world!</h1>
+<InputFile OnChange="HandleSelection" />
 
-Welcome to your new app.
+@code {
+    string status;
+
+    async Task HandleSelection(IEnumerable<IFileListEntry> files)
+    {
+        var file = files.FirstOrDefault();
+
+        if (file != null)
+        {
+            var ms = new MemoryStream();
+            await file.Data.CopyToAsync(ms);
+
+            status = $"Finished loading {file.Size} bytes from {file.Name}";
+
+            var content = new MultipartFormDataContent {
+                { new ByteArrayContent(ms.GetBuffer()), "\"upload\"", file.Name }
+            };
+
+            await client.PostAsync("http://localhost:5000/upload/", content);
+        }
+    }
+}
