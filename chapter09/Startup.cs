@@ -25,7 +25,6 @@ namespace chapter09
             services.AddRazorPages();
             services.AddControllers();
             services.AddServerSideBlazor();
-            services.AddSingleton<FileClassificationService>();
             services.AddSingleton<HttpClient>();
         }
 

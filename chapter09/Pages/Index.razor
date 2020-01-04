@@ -1,11 +1,25 @@
 ﻿@page "/"
+
+@using System.Text.Json
+@using chapter09.Data
+
 @inject HttpClient client
+
 <h1>Upload File</h1>
 
-<InputFile OnChange="HandleSelection" />
+@if (classificationResponseItem == null)
+{
+    <InputFile OnChange="HandleSelection" />
+}
+else
+{
+    <p>@classificationResponseItem.Confidence</p>
+    <p>@classificationResponseItem.IsMalicious</p>
+    <p>@classificationResponseItem.SHA1Sum</p>
+}
 
 @code {
-    string status;
+    FileClassificationResponseItem classificationResponseItem;
 
     async Task HandleSelection(IEnumerable<IFileListEntry> files)
     {
@@ -16,13 +30,18 @@
             var ms = new MemoryStream();
             await file.Data.CopyToAsync(ms);
 
-            status = $"Finished loading {file.Size} bytes from {file.Name}";
-
             var content = new MultipartFormDataContent {
-                { new ByteArrayContent(ms.GetBuffer()), "\"upload\"", file.Name }
+                { new ByteArrayContent(ms.GetBuffer()), "file", file.Name }
             };
 
-            await client.PostAsync("http://localhost:5000/upload/", content);
+            var response = await client.PostAsync("http://localhost:5000/upload/", content);
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+
+            classificationResponseItem = JsonSerializer.Deserialize<FileClassificationResponseItem>(jsonResponse, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
         }
     }
 }

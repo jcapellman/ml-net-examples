@@ -1,8 +1,9 @@
 ﻿using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.AspNetCore.Hosting;
+using chapter09.Data;
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace chapter09.Controllers
@@ -11,28 +12,25 @@ namespace chapter09.Controllers
     [Route("[controller]")]
     public class UploadController : ControllerBase
     {
-        private readonly IWebHostEnvironment environment;
-
-        public UploadController(IWebHostEnvironment environment)
+        private static byte[] GetBytesFromPost(IFormFile file)
         {
-            this.environment = environment;
+            using (var ms = new BinaryReader(file.OpenReadStream()))
+            {
+                return ms.ReadBytes((int)file.Length);
+            }
         }
 
         [HttpPost]
-        public async Task Post()
+        public async Task<FileClassificationResponseItem> Post(IFormFile file)
         {
-            if (HttpContext.Request.Form.Files.Any())
+            if (file == null)
             {
-                foreach (var file in HttpContext.Request.Form.Files)
-                {
-                    var path = Path.Combine(environment.ContentRootPath, "uploads", file.FileName);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-                }
+                return null;
             }
+
+            var fileBytes = GetBytesFromPost(file);
+
+            return new FileClassificationResponseItem(fileBytes);
         }
     }
 }

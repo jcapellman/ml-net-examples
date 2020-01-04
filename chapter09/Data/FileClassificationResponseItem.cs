@@ -1,3 +1,5 @@
+using chapter09.Helpers;
+
 namespace chapter09.Data
 {
     public class FileClassificationResponseItem
@@ -7,5 +9,16 @@ namespace chapter09.Data
         public double Confidence { get; set; }
 
         public bool IsMalicious { get; set; }
+
+        public FileClassificationResponseItem()
+        {
+        }
+
+        public FileClassificationResponseItem(byte[] fileBytes)
+        {
+            SHA1Sum = fileBytes.ToSHA1();
+            Confidence = 0.0;
+            IsMalicious = true;
+        }
     }
 }
