@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 using chapter09.Data;
+using chapter09.ML;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,13 @@ namespace chapter09.Controllers
     [Route("[controller]")]
     public class UploadController : ControllerBase
     {
+        private FileClassificationPredictor _predictor;
+
+        public UploadController(FileClassificationPredictor predictor)
+        {
+            _predictor = predictor;
+        }
+
         private static byte[] GetBytesFromPost(IFormFile file)
         {
             using (var ms = new BinaryReader(file.OpenReadStream()))
@@ -30,7 +38,9 @@ namespace chapter09.Controllers
 
             var fileBytes = GetBytesFromPost(file);
 
-            return new FileClassificationResponseItem(fileBytes);
+            var responseItem = new FileClassificationResponseItem(fileBytes);
+
+            return _predictor.Predict(responseItem);
         }
     }
 }

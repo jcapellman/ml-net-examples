@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
-using chapter09.Data;
+;
+using chapter09.ML;
 
 namespace chapter09
 {
@@ -25,6 +25,8 @@ namespace chapter09
             services.AddRazorPages();
             services.AddControllers();
             services.AddServerSideBlazor();
+
+            services.AddSingleton<FileClassificationPredictor>();
             services.AddSingleton<HttpClient>();
         }
 
