@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using chapter09.ML;
+using chapter09.lib.ML;
 
 namespace chapter09
 {

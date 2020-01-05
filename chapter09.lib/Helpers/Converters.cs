@@ -1,7 +1,7 @@
-﻿using chapter09.Data;
-using chapter09.ML.Objects;
+﻿using chapter09.lib.Data;
+using chapter09.lib.ML.Objects;
 
-namespace chapter09.Helpers
+namespace chapter09.lib.Helpers
 {
     public static class Converters
     {

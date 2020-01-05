@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace chapter09.Helpers
+namespace chapter09.lib.Helpers
 {
     public static class HashingExtension
     {

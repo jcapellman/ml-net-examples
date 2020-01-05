@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace chapter09.Common
+namespace chapter09.lib.Common
 {
     public static class Constants
     {

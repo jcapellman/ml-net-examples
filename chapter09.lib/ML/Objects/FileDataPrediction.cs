@@ -1,4 +1,4 @@
-﻿namespace chapter09.ML.Objects
+﻿namespace chapter09.lib.ML.Objects
 {
     public class FileDataPrediction
     {

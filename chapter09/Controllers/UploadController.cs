@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-using chapter09.Data;
-using chapter09.ML;
+using chapter09.lib.Data;
+using chapter09.lib.ML;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

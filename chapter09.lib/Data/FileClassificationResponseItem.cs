@@ -1,7 +1,8 @@
 using System.Linq;
-using chapter09.Helpers;
 
-namespace chapter09.Data
+using chapter09.lib.Helpers;
+
+namespace chapter09.lib.Data
 {
     public class FileClassificationResponseItem
     {

@@ -13,4 +13,8 @@
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\chapter09.lib\chapter09.lib.csproj" />
+  </ItemGroup>
+
 </Project>

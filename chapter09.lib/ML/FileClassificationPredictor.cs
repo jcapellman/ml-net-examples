@@ -1,12 +1,12 @@
 ﻿using System.IO;
 
-using chapter09.Data;
-using chapter09.Helpers;
-using chapter09.ML.Objects;
+using chapter09.lib.Data;
+using chapter09.lib.Helpers;
+using chapter09.lib.ML.Objects;
 
 using Microsoft.ML;
 
-namespace chapter09.ML
+namespace chapter09.lib.ML
 {
     public class FileClassificationPredictor
     {
