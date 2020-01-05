@@ -7,7 +7,12 @@ namespace chapter09.Helpers
     {
         public static FileData ToFileData(this FileClassificationResponseItem fileClassification)
         {
-            return new FileData();
+            return new FileData
+            {
+                IsLarge = fileClassification.IsLarge,
+                HasImports = fileClassification.HasImports,
+                IsPE = fileClassification.IsPE
+            };
         }
     }
 }
