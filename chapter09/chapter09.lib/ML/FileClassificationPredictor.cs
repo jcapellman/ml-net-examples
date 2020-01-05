@@ -2,21 +2,15 @@
 
 using chapter09.lib.Data;
 using chapter09.lib.Helpers;
+using chapter09.lib.ML.Base;
 using chapter09.lib.ML.Objects;
 
 using Microsoft.ML;
 
 namespace chapter09.lib.ML
 {
-    public class FileClassificationPredictor
+    public class FileClassificationPredictor : BaseML
     {
-        private readonly MLContext MlContext;
-
-        public FileClassificationPredictor()
-        {
-            MlContext = new MLContext(2020);
-        }
-
         public FileClassificationResponseItem Predict(FileClassificationResponseItem file)
         {
             ITransformer mlModel;

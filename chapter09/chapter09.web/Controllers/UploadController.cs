@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 
 using chapter09.lib.Data;
 using chapter09.lib.ML;
@@ -13,7 +12,7 @@ namespace chapter09.Controllers
     [Route("[controller]")]
     public class UploadController : ControllerBase
     {
-        private FileClassificationPredictor _predictor;
+        private readonly FileClassificationPredictor _predictor;
 
         public UploadController(FileClassificationPredictor predictor)
         {
@@ -29,7 +28,7 @@ namespace chapter09.Controllers
         }
 
         [HttpPost]
-        public async Task<FileClassificationResponseItem> Post(IFormFile file)
+        public FileClassificationResponseItem Post(IFormFile file)
         {
             if (file == null)
             {
