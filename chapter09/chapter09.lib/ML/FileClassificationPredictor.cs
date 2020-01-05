@@ -10,9 +10,9 @@ namespace chapter09.lib.ML
 {
     public class FileClassificationPredictor
     {
-        protected readonly MLContext MlContext;
+        private readonly MLContext MlContext;
 
-        protected FileClassificationPredictor()
+        public FileClassificationPredictor()
         {
             MlContext = new MLContext(2020);
         }
