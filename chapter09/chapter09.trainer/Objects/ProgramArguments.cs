@@ -14,6 +14,10 @@ namespace chapter09.trainer.Objects
 
         public string ModelFileName { get; set; }
 
+        public string TestingFolderPath { get; set; }
+
+        public string TrainingFolderPath { get; set; }
+
         public ProgramArguments()
         {
             ModelFileName = lib.Common.Constants.MODEL_PATH;

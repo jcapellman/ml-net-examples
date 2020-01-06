@@ -18,12 +18,14 @@ namespace chapter09.trainer
             switch (arguments.Action)
             {
                 case ProgramActions.FEATURE_EXTRACTOR:
+                    new FileClassificationFeatureExtractor().Extract(arguments.TrainingFolderPath,
+                        arguments.TestingFolderPath);
                     break;
                 case ProgramActions.PREDICT:
                     new FileClassificationPredictor().Predict(arguments.PredictionFileName);
                     break;
                 case ProgramActions.TRAINING:
-                    //new Trainer().Train(arguments);
+                    new FileClassificationTrainer().Train(arguments.TrainingFileName, arguments.TestingFileName);
                     break;
                 default:
                     Console.WriteLine($"Unhandled action {arguments.Action}");
