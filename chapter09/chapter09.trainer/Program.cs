@@ -1,5 +1,6 @@
 ﻿using System;
 
+using chapter09.lib.ML;
 using chapter09.trainer.Enums;
 using chapter09.trainer.Helpers;
 using chapter09.trainer.Objects;
@@ -16,8 +17,10 @@ namespace chapter09.trainer
 
             switch (arguments.Action)
             {
+                case ProgramActions.FEATURE_EXTRACTOR:
+                    break;
                 case ProgramActions.PREDICT:
-                    //new Predictor().Predict(arguments);
+                    new FileClassificationPredictor().Predict(arguments.PredictionFileName);
                     break;
                 case ProgramActions.TRAINING:
                     //new Trainer().Train(arguments);

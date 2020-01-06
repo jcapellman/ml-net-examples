@@ -11,6 +11,13 @@ namespace chapter09.lib.ML
 {
     public class FileClassificationPredictor : BaseML
     {
+        public FileClassificationResponseItem Predict(string fileName)
+        {
+            var bytes = File.ReadAllBytes(fileName);
+
+            return Predict(new FileClassificationResponseItem(bytes));
+        }
+
         public FileClassificationResponseItem Predict(FileClassificationResponseItem file)
         {
             ITransformer mlModel;
