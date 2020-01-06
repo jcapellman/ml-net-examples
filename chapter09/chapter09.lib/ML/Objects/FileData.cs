@@ -12,5 +12,10 @@ namespace chapter09.lib.ML.Objects
 
         [LoadColumn(2)]
         public float HasImports { get; set; }
+
+        [LoadColumn(3)]
+        public bool Label { get; set; }
+
+        public override string ToString() => $"{IsLarge},{IsPE},{HasImports},{Label}";
     }
 }
