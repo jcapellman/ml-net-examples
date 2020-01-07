@@ -22,11 +22,11 @@ namespace chapter09.trainer.Objects
         {
             ModelFileName = lib.Common.Constants.MODEL_PATH;
 
-            PredictionFileName = @"..\..\..\Data\predict.csv";
+            PredictionFileName = @"..\..\..\..\Data\predict.csv";
 
-            TrainingFileName = @"..\..\..\Data\sampledata.csv";
+            TrainingFileName = @"..\..\..\..\Data\sampledata.csv";
 
-            TestingFileName = @"..\..\..\Data\testdata.csv";
+            TestingFileName = @"..\..\..\..\Data\testdata.csv";
         }
     }
 }

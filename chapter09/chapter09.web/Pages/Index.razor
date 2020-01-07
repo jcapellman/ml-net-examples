@@ -17,22 +17,29 @@
 
                 @if (_classificationResponseItem != null) 
                 {
-                    <h3>File Prediction Results:</h3>
+                    @if (_classificationResponseItem.InvalidFile)
+                    {
+                        <p>Invalid file (@_classificationResponseItem.SHA1Sum) - only PE files are supported</p>
+                    }
+                    else
+                    {
+                        <h3>File Prediction Results:</h3>
 
-                    <table>
-                        <tr>
-                            <td>SHA1 Hash</td>
-                            <td>@_classificationResponseItem.SHA1Sum</td>
-                        </tr>
-                        <tr>
-                            <td>Is Malicious?</td>
-                            <td>@_classificationResponseItem.IsMalicious</td>
-                        </tr>
-                        <tr>
-                            <td>Confidence</td>
-                            <td>@_classificationResponseItem.Confidence</td>
-                        </tr>
-                    </table>
+                        <table>
+                            <tr>
+                                <td>SHA1 Hash</td>
+                                <td>@_classificationResponseItem.SHA1Sum</td>
+                            </tr>
+                            <tr>
+                                <td>Is Malicious?</td>
+                                <td>@_classificationResponseItem.IsMalicious</td>
+                            </tr>
+                            <tr>
+                                <td>Confidence</td>
+                                <td>@_classificationResponseItem.Confidence.ToString("P1")</td>
+                            </tr>
+                        </table>
+                    }
                 }
             </div>
         </div>

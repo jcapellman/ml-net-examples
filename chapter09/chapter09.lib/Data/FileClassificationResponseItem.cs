@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 
 using chapter09.lib.Helpers;
 
@@ -15,11 +15,19 @@ namespace chapter09.lib.Data
 
         public bool IsMalicious { get; set; }
 
-        public float IsLarge { get; set; }
+        public float FileSize { get; set; }
 
-        public float IsPE { get; set; }
+        public float Is64Bit { get; set; }
 
-        public float HasImports { get; set; }
+        public float NumImports { get; set; }
+
+        public float NumImportFunctions { get; set; }
+
+        public float NumExportFunctions { get; set; }
+
+        public float IsSigned { get; set; }
+
+        public bool InvalidFile { get; set; }
 
         public FileClassificationResponseItem()
         {
@@ -30,10 +38,39 @@ namespace chapter09.lib.Data
             SHA1Sum = fileBytes.ToSHA1();
             Confidence = 0.0;
             IsMalicious = true;
+            FileSize = fileBytes.Length;
 
-            IsPE = fileBytes.Take(2).ToString() == "MZ" ? TRUE : FALSE;
-            IsLarge = fileBytes.Length > 65536 ? TRUE : FALSE;
-            
+            try
+            {
+                var peFile = new PeNet.PeFile(fileBytes);
+
+                Is64Bit = peFile.Is64Bit ? TRUE : FALSE;
+
+                try
+                {
+                    NumImports = peFile.ImageImportDescriptors.Length;
+                }
+                catch
+                {
+                    NumImports = 0.0f;
+                }
+
+                NumImportFunctions = peFile.ImportedFunctions.Length;
+
+                if (peFile.ExportedFunctions != null)
+                {
+                    NumExportFunctions = peFile.ExportedFunctions.Length;
+                }
+
+                IsSigned = peFile.IsSigned ? TRUE : FALSE;
+
+                InvalidFile = false;
+            }
+            catch (Exception ex)
+            {
+                var e = ex;
+                InvalidFile = true;
+            }
         }
     }
 }

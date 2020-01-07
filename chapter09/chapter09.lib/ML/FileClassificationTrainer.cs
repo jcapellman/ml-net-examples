@@ -16,10 +16,13 @@ namespace chapter09.lib.ML
             return MlContext.Data.LoadFromTextFile(path: fileName,
                 columns: new[]
                 {
-                    new TextLoader.Column(nameof(FileData.IsLarge), DataKind.Single, 0),
-                    new TextLoader.Column(nameof(FileData.IsPE), DataKind.Single, 1),
-                    new TextLoader.Column(nameof(FileData.HasImports), DataKind.Single, 2),
-                    new TextLoader.Column(nameof(FileData.Label), DataKind.Single, 3)
+                    new TextLoader.Column(nameof(FileData.FileSize), DataKind.Single, 0),
+                    new TextLoader.Column(nameof(FileData.Is64Bit), DataKind.Single, 1),
+                    new TextLoader.Column(nameof(FileData.NumberImportFunctions), DataKind.Single, 2),
+                    new TextLoader.Column(nameof(FileData.NumberExportFunctions), DataKind.Single, 3),
+                    new TextLoader.Column(nameof(FileData.IsSigned), DataKind.Single, 4),
+                    new TextLoader.Column(nameof(FileData.NumberImports), DataKind.Single, 5),
+                    new TextLoader.Column(nameof(FileData.Label), DataKind.Boolean, 6)
                 },
                 hasHeader: false,
                 separatorChar: ',');
@@ -45,9 +48,12 @@ namespace chapter09.lib.ML
 
             var dataProcessPipeline = MlContext.Transforms.Concatenate(
                 FEATURES,
-                nameof(FileData.IsLarge),
-                nameof(FileData.IsPE),
-                nameof(FileData.HasImports));
+                nameof(FileData.FileSize),
+                nameof(FileData.Is64Bit),
+                nameof(FileData.IsSigned),
+                nameof(FileData.NumberImportFunctions),
+                nameof(FileData.NumberExportFunctions),
+                nameof(FileData.NumberImports));
 
             var trainer = MlContext.BinaryClassification.Trainers.SdcaLogisticRegression(featureColumnName: FEATURES);
             var trainingPipeline = dataProcessPipeline.Append(trainer);

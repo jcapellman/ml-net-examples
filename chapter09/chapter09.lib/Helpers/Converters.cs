@@ -9,9 +9,12 @@ namespace chapter09.lib.Helpers
         {
             return new FileData
             {
-                IsLarge = fileClassification.IsLarge,
-                HasImports = fileClassification.HasImports,
-                IsPE = fileClassification.IsPE
+                Is64Bit = fileClassification.Is64Bit,
+                IsSigned = fileClassification.IsSigned,
+                NumberImports = fileClassification.NumImports,
+                NumberImportFunctions = fileClassification.NumImportFunctions,
+                NumberExportFunctions = fileClassification.NumExportFunctions,
+                FileSize = fileClassification.FileSize
             };
         }
     }

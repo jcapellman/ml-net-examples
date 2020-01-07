@@ -32,7 +32,7 @@ namespace chapter09.lib.ML
             var prediction = predictionEngine.Predict(file.ToFileData());
 
             file.Confidence = prediction.Probability;
-            file.IsMalicious = prediction.Label;
+            file.IsMalicious = prediction.PredictedLabel;
 
             return file;
         }

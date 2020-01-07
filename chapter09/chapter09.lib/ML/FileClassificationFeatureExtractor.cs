@@ -21,11 +21,13 @@ namespace chapter09.lib.ML
             var files = Directory.GetFiles(folderPath);
 
             using (var streamWriter =
-                new StreamWriter(Path.Combine(AppContext.BaseDirectory, $"../../../Data/{outputFile}")))
+                new StreamWriter(Path.Combine(AppContext.BaseDirectory, $"../../../../{outputFile}")))
             {
                 foreach (var file in files)
                 {
                     var extractedData = new FileClassificationResponseItem(File.ReadAllBytes(file)).ToFileData();
+
+                    extractedData.Label = file.Contains("clean");
 
                     streamWriter.WriteLine(extractedData.ToString());
                 }
