@@ -55,7 +55,7 @@ namespace chapter09.lib.ML
                 nameof(FileData.NumberExportFunctions),
                 nameof(FileData.NumberImports));
 
-            var trainer = MlContext.BinaryClassification.Trainers.SdcaLogisticRegression(featureColumnName: FEATURES);
+            var trainer = MlContext.BinaryClassification.Trainers.FastTree(featureColumnName: FEATURES);
             var trainingPipeline = dataProcessPipeline.Append(trainer);
             var trainedModel = trainingPipeline.Fit(trainingDataView);
 

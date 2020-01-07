@@ -37,7 +37,7 @@ namespace chapter09.lib.Data
         {
             SHA1Sum = fileBytes.ToSHA1();
             Confidence = 0.0;
-            IsMalicious = true;
+            IsMalicious = false;
             FileSize = fileBytes.Length;
 
             try
