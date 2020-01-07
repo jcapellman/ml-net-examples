@@ -27,7 +27,7 @@ namespace chapter09.lib.ML
                 {
                     var extractedData = new FileClassificationResponseItem(File.ReadAllBytes(file)).ToFileData();
 
-                    extractedData.Label = file.Contains("clean");
+                    extractedData.Label = !file.Contains("clean");
 
                     streamWriter.WriteLine(extractedData.ToString());
                 }

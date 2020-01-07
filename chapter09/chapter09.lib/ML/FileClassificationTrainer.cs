@@ -1,6 +1,7 @@
 ﻿using System;
 
 using chapter09.lib.Common;
+using chapter09.lib.Helpers;
 using chapter09.lib.ML.Base;
 using chapter09.lib.ML.Objects;
 
@@ -46,16 +47,18 @@ namespace chapter09.lib.ML
 
             var trainingDataView = GetDataView(trainingFileName);
 
-            var dataProcessPipeline = MlContext.Transforms.Concatenate(
-                FEATURES,
-                nameof(FileData.FileSize),
-                nameof(FileData.Is64Bit),
-                nameof(FileData.IsSigned),
-                nameof(FileData.NumberImportFunctions),
-                nameof(FileData.NumberExportFunctions),
-                nameof(FileData.NumberImports));
+            IEstimator<ITransformer> dataProcessPipeline = MlContext.Transforms.Concatenate(FEATURES,
+                    typeof(FileData).ToPropertyList<FileData>(nameof(FileData.Label)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(inputColumnName: "Features",
+                    outputColumnName: "FeaturesNormalizedByMeanVar"));
 
-            var trainer = MlContext.BinaryClassification.Trainers.FastTree(featureColumnName: FEATURES);
+            var trainer = MlContext.BinaryClassification.Trainers.FastTree(labelColumnName: nameof(FileData.Label),
+                featureColumnName: "FeaturesNormalizedByMeanVar",
+                numberOfLeaves: 2,
+                numberOfTrees: 1000,
+                minimumExampleCountPerLeaf: 1,
+                learningRate: 0.2);
+
             var trainingPipeline = dataProcessPipeline.Append(trainer);
             var trainedModel = trainingPipeline.Fit(trainingDataView);
 
@@ -67,8 +70,8 @@ namespace chapter09.lib.ML
 
             var modelMetrics = MlContext.BinaryClassification.Evaluate(
                 data: testDataView,
-                labelColumnName: "Label",
-                scoreColumnName: "Score");
+                labelColumnName: nameof(FileDataPrediction.Label),
+                scoreColumnName: nameof(FileDataPrediction.Score));
 
             Console.WriteLine($"Entropy: {modelMetrics.Entropy}");
             Console.WriteLine($"Log Loss: {modelMetrics.LogLoss}");
