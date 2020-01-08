@@ -24,3 +24,7 @@ h1 {
     text-align: center;
     height: 300px;
 }
+
+.tableLabel {
+    font-weight: bold;
+}
