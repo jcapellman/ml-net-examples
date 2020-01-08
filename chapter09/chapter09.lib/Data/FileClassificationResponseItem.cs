@@ -27,7 +27,7 @@ namespace chapter09.lib.Data
 
         public float IsSigned { get; set; }
 
-        public bool InvalidFile { get; set; }
+        public string ErrorMessage { get; set; }
 
         public FileClassificationResponseItem()
         {
@@ -63,13 +63,10 @@ namespace chapter09.lib.Data
                 }
 
                 IsSigned = peFile.IsSigned ? TRUE : FALSE;
-
-                InvalidFile = false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                var e = ex;
-                InvalidFile = true;
+                ErrorMessage = $"Invalid file ({SHA1Sum}) - only PE files are supported";
             }
         }
     }
