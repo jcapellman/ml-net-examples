@@ -35,8 +35,7 @@ namespace chapter09.lib.ML
                 .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(FileData.NumberExportFunctions)))
                 .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(FileData.NumberImports)))
                 .Append(MlContext.Transforms.Text.TokenizeIntoWords("FeaturizeText", nameof(FileData.Strings)))
-                .Append(MlContext.Transforms.Concatenate(FEATURES, 
-                    "FeaturizeText", nameof(FileData.FileSize), nameof(FileData.Is64Bit),
+                .Append(MlContext.Transforms.Concatenate(FEATURES, nameof(FileData.FileSize), nameof(FileData.Is64Bit),
                     nameof(FileData.IsSigned), nameof(FileData.NumberImportFunctions), nameof(FileData.NumberExportFunctions),
                     nameof(FileData.NumberImports)));
 

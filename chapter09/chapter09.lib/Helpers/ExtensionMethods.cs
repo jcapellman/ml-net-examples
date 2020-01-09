@@ -25,7 +25,7 @@ namespace chapter09.lib.Helpers
                 return stringLines.ToString();
             }
 
-            var dataToProcess = data.Length > 128 ? data.Take(128).ToArray() : data;
+            var dataToProcess = data.Length > 65536 ? data.Take(65536).ToArray() : data;
 
             using (var ms = new MemoryStream(dataToProcess, false))
             {
