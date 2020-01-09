@@ -25,6 +25,9 @@ namespace chapter09.lib.ML.Objects
         [LoadColumn(6)]
         public bool Label { get; set; }
 
-        public override string ToString() => $"{FileSize},{Is64Bit},{NumberImportFunctions},{NumberExportFunctions},{IsSigned},{NumberImports},{Label}";
+        [LoadColumn(7)]
+        public string Strings { get; set; }
+
+        public override string ToString() => $"{FileSize},{Is64Bit},{NumberImportFunctions},{NumberExportFunctions},{IsSigned},{NumberImports},{Label},{Strings}";
     }
 }

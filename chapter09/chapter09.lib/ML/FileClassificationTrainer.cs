@@ -47,10 +47,17 @@ namespace chapter09.lib.ML
 
             var trainingDataView = GetDataView(trainingFileName);
 
-            IEstimator<ITransformer> dataProcessPipeline = MlContext.Transforms.Concatenate(FEATURES,
-                    typeof(FileData).ToPropertyList<FileData>(nameof(FileData.Label)))
-                .Append(MlContext.Transforms.NormalizeMeanVariance(inputColumnName: "Features",
-                    outputColumnName: "FeaturesNormalizedByMeanVar"));
+            var dataProcessPipeline = MlContext.Transforms.Text.FeaturizeText(nameof(FileData.Strings))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(FileData.FileSize)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(FileData.Is64Bit)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(FileData.IsSigned)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(FileData.NumberImportFunctions)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(FileData.NumberExportFunctions)))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(FileData.NumberImports)))
+                .Append(MlContext.Transforms.Concatenate(FEATURES, 
+                    nameof(FileData.Strings), nameof(FileData.FileSize), nameof(FileData.Is64Bit),
+                    nameof(FileData.IsSigned), nameof(FileData.NumberImportFunctions), nameof(FileData.NumberExportFunctions),
+                    nameof(FileData.NumberImports)));
 
             var trainer = MlContext.BinaryClassification.Trainers.FastTree(labelColumnName: nameof(FileData.Label),
                 featureColumnName: "FeaturesNormalizedByMeanVar",

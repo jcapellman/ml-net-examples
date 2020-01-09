@@ -14,7 +14,8 @@ namespace chapter09.lib.Helpers
                 NumberImports = fileClassification.NumImports,
                 NumberImportFunctions = fileClassification.NumImportFunctions,
                 NumberExportFunctions = fileClassification.NumExportFunctions,
-                FileSize = fileClassification.FileSize
+                FileSize = fileClassification.FileSize,
+                Strings = fileClassification.Strings
             };
         }
     }
