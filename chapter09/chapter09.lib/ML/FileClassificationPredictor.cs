@@ -20,6 +20,13 @@ namespace chapter09.lib.ML
 
         public FileClassificationResponseItem Predict(FileClassificationResponseItem file)
         {
+            if (!File.Exists(Common.Constants.MODEL_PATH))
+            {
+                file.ErrorMessage = $"Model not found ({Common.Constants.MODEL_PATH}) - please train the model first";
+
+                return file;
+            }
+
             ITransformer mlModel;
 
             using (var stream = new FileStream(Common.Constants.MODEL_PATH, FileMode.Open, FileAccess.Read, FileShare.Read))

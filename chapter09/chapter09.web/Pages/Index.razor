@@ -1,6 +1,7 @@
 ﻿@page "/"
 
 @using System.Text.Json
+
 @using chapter09.lib.Data
 
 @inject HttpClient client
@@ -17,9 +18,9 @@
 
                 @if (_classificationResponseItem != null) 
                 {
-                    @if (_classificationResponseItem.InvalidFile)
+                    @if (!string.IsNullOrEmpty(_classificationResponseItem.ErrorMessage))
                     {
-                        <p>Invalid file (@_classificationResponseItem.SHA1Sum) - only PE files are supported</p>
+                        <p>@_classificationResponseItem.ErrorMessage</p>
                     }
                     else
                     {
@@ -27,15 +28,15 @@
 
                         <table>
                             <tr>
-                                <td>SHA1 Hash</td>
+                                <td class="tableLabel">SHA1 Hash</td>
                                 <td>@_classificationResponseItem.SHA1Sum</td>
                             </tr>
                             <tr>
-                                <td>Is Malicious?</td>
+                                <td class="tableLabel">Is Malicious?</td>
                                 <td>@_classificationResponseItem.IsMalicious</td>
                             </tr>
                             <tr>
-                                <td>Confidence</td>
+                                <td class="tableLabel">Confidence</td>
                                 <td>@_classificationResponseItem.Confidence.ToString("P1")</td>
                             </tr>
                         </table>
@@ -59,8 +60,10 @@
             await file.Data.CopyToAsync(ms);
 
             var content = new MultipartFormDataContent {
-        { new ByteArrayContent(ms.GetBuffer()), "file", file.Name }
-    };
+                {
+                    new ByteArrayContent(ms.GetBuffer()), "file", file.Name
+                }
+            };
 
             var response = await client.PostAsync("http://localhost:5000/upload/", content);
 
