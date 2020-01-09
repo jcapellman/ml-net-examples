@@ -1,5 +1,5 @@
 using System.Net.Http;
-
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 
@@ -32,6 +32,8 @@ namespace chapter09
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

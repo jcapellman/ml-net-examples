@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Text;
 
 using chapter09.lib.ML;
+
 using chapter09.trainer.Enums;
 using chapter09.trainer.Helpers;
 using chapter09.trainer.Objects;
@@ -11,6 +13,8 @@ namespace chapter09.trainer
     {
         public static void Main(string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             Console.Clear();
 
             var arguments = CommandLineParser.ParseArguments<ProgramArguments>(args);

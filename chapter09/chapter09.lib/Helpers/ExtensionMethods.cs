@@ -25,7 +25,9 @@ namespace chapter09.lib.Helpers
                 return stringLines.ToString();
             }
 
-            using (var ms = new MemoryStream(data, false))
+            var dataToProcess = data.Length > 128 ? data.Take(128).ToArray() : data;
+
+            using (var ms = new MemoryStream(dataToProcess, false))
             {
                 using (var streamReader = new StreamReader(ms, Encoding.GetEncoding(FILE_ENCODING), false, BUFFER_SIZE, false))
                 {

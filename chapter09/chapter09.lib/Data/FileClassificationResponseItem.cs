@@ -27,6 +27,8 @@ namespace chapter09.lib.Data
 
         public float IsSigned { get; set; }
 
+        public string Strings { get; set; }
+
         public string ErrorMessage { get; set; }
 
         public FileClassificationResponseItem()
@@ -63,6 +65,8 @@ namespace chapter09.lib.Data
                 }
 
                 IsSigned = peFile.IsSigned ? TRUE : FALSE;
+
+                Strings = fileBytes.ToStringsExtraction();
             }
             catch (Exception)
             {

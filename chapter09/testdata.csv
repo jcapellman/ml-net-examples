@@ -1,14 +1,14 @@
-18944,0,7,0,0,4,True
-18944,0,7,0,0,4,True
-1670144,1,738,0,0,24,False
-14848,0,1,0,0,1,False
-159744,1,124,0,0,11,False
-4615616,1,998,0,1,128,False
-5120,0,1,0,0,1,False
-16384,0,1,0,0,1,False
-326144,1,149,0,0,11,False
-374136,0,1,0,1,1,False
-61816,0,1,0,1,1,False
-1442680,0,1,0,1,1,False
-46456,0,1,0,1,1,False
-477048,0,1,0,1,1,False
+18944	0	7	0	0	4	True	"!This program cannot be run in DOS mode."
+18944	0	7	0	0	4	True	"!This program cannot be run in DOS mode."
+1670144	1	738	0	0	24	False	"!This program cannot be run in DOS mode."
+14848	0	1	0	0	1	False	"!This program cannot be run in DOS mode."
+159744	1	124	0	0	11	False	"!This program cannot be run in DOS mode."
+4615616	1	998	0	1	128	False	"!This program cannot be run in DOS mode."
+5120	0	1	0	0	1	False	"!This program cannot be run in DOS mode."
+16384	0	1	0	0	1	False	"!This program cannot be run in DOS mode."
+326144	1	149	0	0	11	False	"!This program cannot be run in DOS mode."
+374136	0	1	0	1	1	False	"!This program cannot be run in DOS mode."
+61816	0	1	0	1	1	False	"!This program cannot be run in DOS mode."
+1442680	0	1	0	1	1	False	"!This program cannot be run in DOS mode."
+46456	0	1	0	1	1	False	"!This program cannot be run in DOS mode."
+477048	0	1	0	1	1	False	"!This program cannot be run in DOS mode."
