@@ -34,10 +34,10 @@ namespace chapter09.lib.ML
                 .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(FileData.NumberImportFunctions)))
                 .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(FileData.NumberExportFunctions)))
                 .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(FileData.NumberImports)))
-                .Append(MlContext.Transforms.Text.TokenizeIntoWords("FeaturizeText", nameof(FileData.Strings)))
+                .Append(MlContext.Transforms.Text.FeaturizeText("FeaturizeText", nameof(FileData.Strings)))
                 .Append(MlContext.Transforms.Concatenate(FEATURES, nameof(FileData.FileSize), nameof(FileData.Is64Bit),
                     nameof(FileData.IsSigned), nameof(FileData.NumberImportFunctions), nameof(FileData.NumberExportFunctions),
-                    nameof(FileData.NumberImports)));
+                    nameof(FileData.NumberImports), "FeaturizeText"));
 
             var trainer = MlContext.BinaryClassification.Trainers.FastTree(labelColumnName: nameof(FileData.Label),
                 featureColumnName: FEATURES,
