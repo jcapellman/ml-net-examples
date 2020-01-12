@@ -26,7 +26,9 @@ namespace chapter09.trainer
                         arguments.TestingFolderPath);
                     break;
                 case ProgramActions.PREDICT:
-                    new FileClassificationPredictor().Predict(arguments.PredictionFileName);
+                    var prediction = new FileClassificationPredictor().Predict(arguments.PredictionFileName);
+
+                    Console.WriteLine($"File is {(prediction.IsMalicious ? "malicious" : "clean")} with a {prediction.Confidence:P2}% confidence");
                     break;
                 case ProgramActions.TRAINING:
                     new FileClassificationTrainer().Train(arguments.TrainingFileName, arguments.TestingFileName);

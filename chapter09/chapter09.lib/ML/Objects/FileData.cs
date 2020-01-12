@@ -28,6 +28,8 @@ namespace chapter09.lib.ML.Objects
         [LoadColumn(7)]
         public string Strings { get; set; }
 
-        public override string ToString() => $"{FileSize}\t{Is64Bit}\t{NumberImportFunctions}\t{NumberExportFunctions}\t{IsSigned}\t{NumberImports}\t{Label}\t\"{Strings}\"";
+        public override string ToString() => $"{FileSize}\t{Is64Bit}\t{NumberImportFunctions}\t" +
+                                             $"{NumberExportFunctions}\t{IsSigned}\t{NumberImports}\t" +
+                                             $"{Label}\t\"{Strings}\"";
     }
 }
