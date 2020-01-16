@@ -40,6 +40,8 @@ namespace chapter10_app.ViewModels
             }
         }
 
+        public bool Initialize() => _prediction.Initialize();
+
         public Uri BuildUri()
         {
             var webServiceUrl = WebServiceURL;

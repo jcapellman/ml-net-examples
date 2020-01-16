@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
+using chapter10_library.Common;
 using chapter10_library.Enums;
 using chapter10_library.ML.Objects;
 
@@ -14,13 +16,22 @@ namespace chapter10_library.ML
 
         private const double THRESHOLD = 0.5;
 
-        public Prediction()
+        public bool Initialize()
         {
-            var assembly = typeof(Prediction).GetTypeInfo().Assembly;
+            try
+            {
+                var assembly = typeof(Prediction).GetTypeInfo().Assembly;
 
-            var resource = assembly.GetManifestResourceStream("classification.mdl");
+                var resource = assembly.GetManifestResourceStream(Constants.MODEL_NAME);
 
-            _model = MlContext.Model.Load(resource, out var schema);
+                _model = MlContext.Model.Load(resource, out var schema);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public Classification Predict(string html)
