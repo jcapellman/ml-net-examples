@@ -2,3 +2,7 @@
 */*/obj/*
 /.vs/*
 *.user
+/chapter09/obj/Debug/netcoreapp3.1
+/chapter09/bin/Debug/netcoreapp3.1
+/chapter09/obj/Debug/netcoreapp3.0/RazorDeclaration
+/chapter09/obj
