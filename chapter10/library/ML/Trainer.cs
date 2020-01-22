@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 
-using chapter10_library.ML.Objects;
+using chapter10.lib.ML.Objects;
 
 using Microsoft.ML;
 
-namespace UWP_Browser_Classification_Trainer
+namespace chapter10.lib.ML
 {
     public class Trainer
     {

@@ -1,4 +1,4 @@
-﻿namespace chapter10_library.Enums
+﻿namespace chapter10.lib.Enums
 {
     public enum Classification
     {

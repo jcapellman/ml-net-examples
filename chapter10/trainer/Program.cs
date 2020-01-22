@@ -1,41 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 
-using chapter10_library.Enums;
+using chapter10.lib.ML;
 
-namespace UWP_Browser_Classification_Trainer
+using chapter10.trainer.Enums;
+using chapter10.trainer.Helpers;
+using chapter10.trainer.Objects;
+
+namespace chapter10.trainer
 {
-    class Program
+    public class Program
     {
-        private static (TrainerActions Action, string pathOne, string pathTwo) ParseArgs(IReadOnlyList<string> args)
+        public static void Main(string[] args)
         {
-            if (args.Count != 3)
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            Console.Clear();
+
+            var arguments = CommandLineParser.ParseArguments<ProgramArguments>(args);
+
+            switch (arguments.Action)
             {
-                throw new ArgumentException("Not enough arguments");
-            }
-
-            var action = Enum.GetNames(typeof(TrainerActions)).FirstOrDefault(a => a == args[0]);
-
-            if (action == null)
-            {
-                throw new ArgumentOutOfRangeException($"{args[0]} is not a valid action");
-            }
-
-            return (Enum.Parse<TrainerActions>(action), args[1], args[2]);
-        }
-
-        static void Main(string[] args)
-        {
-            var (action, pathOne, pathTwo) = ParseArgs(args);
-
-            switch (action)
-            {
-                case TrainerActions.TRAIN_MODEL:
-                    Trainer.TrainModel(pathOne, pathTwo);
+                case ProgramActions.FEATURE_EXTRACTOR:
+                    new FileClassificationFeatureExtractor().Extract(arguments.TrainingFolderPath,
+                        arguments.TestingFolderPath);
                     break;
-                case TrainerActions.FEATURE_EXTRACTION:
-                    FeatureExtract.Extract(pathOne, pathTwo);
+                case ProgramActions.PREDICT:
+                    var prediction = new FileClassificationPredictor().Predict(arguments.PredictionFileName);
+
+                    Console.WriteLine($"File is {(prediction.IsMalicious ? "malicious" : "clean")} with a {prediction.Confidence:P2}% confidence");
+                    break;
+                case ProgramActions.TRAINING:
+                    new FileClassificationTrainer().Train(arguments.TrainingFileName, arguments.TestingFileName);
+                    break;
+                default:
+                    Console.WriteLine($"Unhandled action {arguments.Action}");
                     break;
             }
         }

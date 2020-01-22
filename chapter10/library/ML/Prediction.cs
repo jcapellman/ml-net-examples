@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 
-using chapter10_library.Enums;
-using chapter10_library.ML.Objects;
+using chapter10.lib.Enums;
+using chapter10.lib.ML.Objects;
 
 using Microsoft.ML;
 
-namespace chapter10_library.ML
+namespace chapter10.lib.ML
 {
     public class Prediction
     {

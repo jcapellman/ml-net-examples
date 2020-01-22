@@ -1,6 +1,6 @@
 ﻿using Microsoft.ML.Data;
 
-namespace chapter10_library.ML.Objects
+namespace chapter10.lib.ML.Objects
 {
     public class OutputItem
     {

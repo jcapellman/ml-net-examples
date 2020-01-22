@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace chapter10.trainer
+namespace chapter10.lib.ML
 {
     public class FeatureExtract
     {
