@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RootNamespace>UWP_Browser_Classification_Trainer</RootNamespace>
+    <RootNamespace>chapter10.trainer</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

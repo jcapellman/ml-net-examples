@@ -9,7 +9,7 @@ namespace chapter10_app.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
-        private readonly Prediction _prediction = new Prediction();
+        private readonly WebContentPredictor _prediction = new WebContentPredictor();
 
         private bool _enableGoButton;
 
@@ -59,7 +59,7 @@ namespace chapter10_app.ViewModels
         {
             var result = _prediction.Predict(html);
 
-            return result == Classification.BENIGN ? 
+            return !result.IsMalicious ? 
                 (Classification.BENIGN, string.Empty) : 
                 (Classification.MALICIOUS, $"<html><body>{WebServiceURL} was found to be a malicious site</body></html>");
         }

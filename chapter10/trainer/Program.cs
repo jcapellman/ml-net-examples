@@ -22,16 +22,26 @@ namespace chapter10.trainer
             switch (arguments.Action)
             {
                 case ProgramActions.FEATURE_EXTRACTOR:
-                    new FileClassificationFeatureExtractor().Extract(arguments.TrainingFolderPath,
-                        arguments.TestingFolderPath);
+                    new WebContentFeatureExtractor().Extract(arguments.TrainingFolderPath, arguments.TestingFolderPath);
                     break;
                 case ProgramActions.PREDICT:
-                    var prediction = new FileClassificationPredictor().Predict(arguments.PredictionFileName);
+                    var predictor = new WebContentPredictor();
+
+                    var initialization = predictor.Initialize();
+
+                    if (!initialization)
+                    {
+                        Console.WriteLine("Failed to initialize the model");
+
+                        return;
+                    }
+
+                    var prediction = predictor.Predict(arguments.PredictionFileName);
 
                     Console.WriteLine($"File is {(prediction.IsMalicious ? "malicious" : "clean")} with a {prediction.Confidence:P2}% confidence");
                     break;
                 case ProgramActions.TRAINING:
-                    new FileClassificationTrainer().Train(arguments.TrainingFileName, arguments.TestingFileName);
+                    new WebContentTrainer().Train(arguments.TrainingFileName, arguments.TestingFileName);
                     break;
                 default:
                     Console.WriteLine($"Unhandled action {arguments.Action}");

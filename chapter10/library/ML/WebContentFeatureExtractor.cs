@@ -3,9 +3,9 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace chapter10.trainer
+namespace chapter10.lib.ML
 {
-    public class FeatureExtract
+    public class WebContentFeatureExtractor
     {
         private static async Task<string> GetWebContent(string url)
         {
@@ -33,11 +33,11 @@ namespace chapter10.trainer
             File.WriteAllText(outputFile, string.Join(",", urlContent));
         }
 
-        public static void Extract(string cleanFile, string maliciousFile)
+        public void Extract(string trainingPath, string testPath)
         {
-            GetContentFile(cleanFile, "clean.csv");
+            GetContentFile(trainingPath, "training.csv");
 
-            GetContentFile(maliciousFile, "malicious.csv");
+            GetContentFile(testPath, "testing.csv");
         }
     }
 }
