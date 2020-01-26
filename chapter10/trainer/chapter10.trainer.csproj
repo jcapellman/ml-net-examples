@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\library\chapter10_library.csproj" />
+    <ProjectReference Include="..\library\chapter10.lib.csproj" />
   </ItemGroup>
 
 </Project>

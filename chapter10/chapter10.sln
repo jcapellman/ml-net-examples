@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chapter10_app", "app\chapter10_app.csproj", "{A3406AB4-C4CA-46CE-B467-90CA6FF8B5E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chapter10_app", "app\chapter10.app.csproj", "{A3406AB4-C4CA-46CE-B467-90CA6FF8B5E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chapter10_library", "library\chapter10_library.csproj", "{E855EF7F-EC41-4082-8D05-74B2D8F3761A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chapter10_lib", "library\chapter10.lib.csproj", "{E855EF7F-EC41-4082-8D05-74B2D8F3761A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chapter10_trainer", "trainer\chapter10_trainer.csproj", "{524E1B48-3FAE-436B-9A79-1C8DB5F96F13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chapter10_trainer", "trainer\chapter10.trainer.csproj", "{524E1B48-3FAE-436B-9A79-1C8DB5F96F13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

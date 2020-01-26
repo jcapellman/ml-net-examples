@@ -158,9 +158,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\library\chapter10_library.csproj">
-      <Project>{46334406-8f18-41d2-abee-255ec4f875e6}</Project>
-      <Name>chapter10_library</Name>
+    <ProjectReference Include="..\library\chapter10.lib.csproj">
+      <Project>{e855ef7f-ec41-4082-8d05-74b2d8f3761a}</Project>
+      <Name>chapter10.lib</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

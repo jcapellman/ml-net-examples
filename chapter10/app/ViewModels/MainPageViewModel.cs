@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-using chapter10_library.Enums;
-using chapter10_library.ML;
+using chapter10.lib.Enums;
+using chapter10.lib.ML;
 
 namespace chapter10_app.ViewModels
 {

@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
-using chapter10_library.Enums;
+using chapter10.lib.Enums;
 
 using chapter10_app.ViewModels;
 

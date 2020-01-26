@@ -1,4 +1,4 @@
-﻿using chapter09.trainer.Enums;
+﻿using chapter10.trainer.Enums;
 
 namespace chapter10.trainer.Objects
 {
