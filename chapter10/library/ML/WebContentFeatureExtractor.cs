@@ -1,43 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
+
+using chapter10.lib.Helpers;
 
 namespace chapter10.lib.ML
 {
     public class WebContentFeatureExtractor
     {
-        private static async Task<string> GetWebContent(string url)
-        {
-            using (var httpClient = new HttpClient())
-            {
-                var response = await httpClient.GetAsync(url);
-
-                return await response.Content.ReadAsStringAsync();
-            }
-        }
-
         private static async void GetContentFile(string inputFile, string outputFile)
         {
-            var urls = File.ReadAllLines(inputFile);
+            var lines = File.ReadAllLines(inputFile);
 
             var urlContent = new List<string>();
 
-            foreach (var url in urls)
+            foreach (var line in lines)
             {
-                var content = await GetWebContent(url);
+                var url = line.Split(',')[0];
+                var label = Convert.ToBoolean(line.Split(',')[1]);
 
-                urlContent.Add(content);
+                var content = await url.ToWebContentString();
+
+                urlContent.Add($"{label},{content}");
             }
 
             File.WriteAllText(outputFile, string.Join(",", urlContent));
         }
 
-        public void Extract(string trainingPath, string testPath)
+        public void Extract(string trainingURLList, string testURLList, string trainingOutputFileName, string testingOutputFileName)
         {
-            GetContentFile(trainingPath, "training.csv");
+            GetContentFile(trainingURLList, trainingOutputFileName);
 
-            GetContentFile(testPath, "testing.csv");
+            GetContentFile(testURLList, testingOutputFileName);
         }
     }
 }

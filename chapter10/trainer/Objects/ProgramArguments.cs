@@ -10,17 +10,19 @@ namespace chapter10.trainer.Objects
 
         public string TestingFileName { get; set; }
 
+        public string TrainingOutputFileName { get; set; }
+
+        public string TestingOutputFileName { get; set; }
+
         public string URL { get; set; }
 
         public string ModelFileName { get; set; }
 
         public ProgramArguments()
         {
-            ModelFileName = lib.Common.Constants.MODEL_PATH;
+            TrainingOutputFileName = @"..\..\..\..\Data\sampledata.csv";
 
-            TrainingFileName = @"..\..\..\..\Data\sampledata.csv";
-
-            TestingFileName = @"..\..\..\..\Data\testdata.csv";
+            TestingOutputFileName = @"..\..\..\..\Data\testdata.csv";
         }
     }
 }

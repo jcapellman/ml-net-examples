@@ -22,7 +22,8 @@ namespace chapter10.trainer
             switch (arguments.Action)
             {
                 case ProgramActions.FEATURE_EXTRACTOR:
-                    new WebContentFeatureExtractor().Extract(arguments.TrainingFileName, arguments.TestingFileName);
+                    new WebContentFeatureExtractor().Extract(arguments.TrainingFileName, arguments.TestingFileName, 
+                        arguments.TrainingOutputFileName, arguments.TestingOutputFileName);
                     break;
                 case ProgramActions.PREDICT:
                     var predictor = new WebContentPredictor();
@@ -41,7 +42,7 @@ namespace chapter10.trainer
                     Console.WriteLine($"URL is {(prediction.IsMalicious ? "malicious" : "clean")} with a {prediction.Confidence:P2}% confidence");
                     break;
                 case ProgramActions.TRAINING:
-                    new WebContentTrainer().Train(arguments.TrainingFileName, arguments.TestingFileName);
+                    new WebContentTrainer().Train(arguments.TrainingFileName, arguments.TestingFileName, arguments.ModelFileName);
                     break;
                 default:
                     Console.WriteLine($"Unhandled action {arguments.Action}");

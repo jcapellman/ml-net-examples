@@ -1,6 +1,6 @@
 ﻿using System;
+using System.IO;
 
-using chapter10.lib.Common;
 using chapter10.lib.ML.Base;
 using chapter10.lib.ML.Objects;
 
@@ -10,7 +10,7 @@ namespace chapter10.lib.ML
 {
     public class WebContentTrainer : BaseML
     {
-        public void Train(string trainingFileName, string testingFileName)
+        public void Train(string trainingFileName, string testingFileName, string modelFileName)
         {
             if (!System.IO.File.Exists(trainingFileName))
             {
@@ -22,6 +22,13 @@ namespace chapter10.lib.ML
             if (!System.IO.File.Exists(testingFileName))
             {
                 Console.WriteLine($"Failed to find test data file ({testingFileName}");
+
+                return;
+            }
+
+            if (!System.IO.File.Exists(modelFileName))
+            {
+                Console.WriteLine($"Failed to find model file ({modelFileName}");
 
                 return;
             }
@@ -38,7 +45,7 @@ namespace chapter10.lib.ML
             var trainingPipeline = dataProcessPipeline.Append(trainer);
             var trainedModel = trainingPipeline.Fit(dataView);
 
-            MlContext.Model.Save(trainedModel, dataView.Schema, Constants.MODEL_PATH);
+            MlContext.Model.Save(trainedModel, dataView.Schema, Path.Combine(AppContext.BaseDirectory, modelFileName));
 
             var testingDataView = MlContext.Data.LoadFromTextFile<WebPagePredictionItem>(testingFileName, hasHeader: false);
 
