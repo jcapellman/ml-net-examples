@@ -1,10 +1,7 @@
-﻿using Microsoft.ML.Data;
-
-namespace chapter10.lib.ML.Objects
+﻿namespace chapter10.lib.ML.Objects
 {
     public class WebPagePredictionItem
     {
-        [ColumnName("PredictedLabel")]
         public bool Prediction { get; set; }
 
         public float Probability { get; set; }

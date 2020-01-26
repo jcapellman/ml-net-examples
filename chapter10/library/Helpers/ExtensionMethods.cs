@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Net.Http;
+using System.Text;
+using HtmlAgilityPack;
 
 namespace chapter10.lib.Helpers
 {
@@ -9,27 +10,59 @@ namespace chapter10.lib.Helpers
         public static string[] ToPropertyList<T>(this Type objType, string labelName) => 
             objType.GetProperties().Where(a => a.Name != labelName).Select(a => a.Name).ToArray();
 
-        public static string ToWebContentString(this string url)
+        private static string GetTextsFromNode(HtmlNodeCollection nodes)
         {
-            using (var handler = new HttpClientHandler())
+            var texts = "";
+
+            foreach (var node in nodes)
             {
-                if (handler.SupportsRedirectConfiguration)
+                if (node.Name.ToLowerInvariant() == "style")
                 {
-                    handler.AllowAutoRedirect = true;
-                    handler.MaxAutomaticRedirections = 5;
+                    continue;
                 }
 
-                if (handler.SupportsAutomaticDecompression)
+                if (node.HasChildNodes)
                 {
-                    handler.AutomaticDecompression = System.Net.DecompressionMethods.GZip |
-                                                     System.Net.DecompressionMethods.Deflate;
+                    texts = texts + GetTextsFromNode(node.ChildNodes);
                 }
-
-                using (var httpClient = new HttpClient(handler))
+                else
                 {
-                    return httpClient.GetStringAsync(url).Result;
+                    var innerText = node.InnerText;
+
+                    if (!string.IsNullOrWhiteSpace(innerText))
+                    {
+                        if (node.Name.ToLowerInvariant() == "span")
+                        {
+
+                            texts = texts + " " + node.InnerText + "\n";
+                        }
+                        else
+                        {
+                            texts = texts + node.InnerText.Trim();
+                        }
+                    }
                 }
             }
+
+            return texts;
+        }
+
+        public static string ToWebContentString(this string url)
+        {
+            var web = new HtmlWeb();
+
+            var htmlDoc = web.Load(url);
+
+            var sb = new StringBuilder();
+
+            htmlDoc.DocumentNode.Descendants().Where(n => n.Name == "script" || n.Name == "style").ToList().ForEach(n => n.Remove());
+
+            foreach (var node in htmlDoc.DocumentNode.SelectNodes("//text()[normalize-space(.) != '']"))
+            {
+                sb.Append(node.InnerText.Trim().Replace(" ", ""));
+            }
+
+            return sb.ToString();
         }
     }
 }

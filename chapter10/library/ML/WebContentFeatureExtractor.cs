@@ -25,7 +25,9 @@ namespace chapter10.lib.ML
                 {
                     var content = url.ToWebContentString();
 
-                    urlContent.Add($"{label},{content}");
+                    content = content.Replace('|', '-');
+
+                    urlContent.Add($"{label}|{content}");
                 }
                 catch (Exception)
                 {
@@ -33,7 +35,7 @@ namespace chapter10.lib.ML
                 }
             }
 
-            File.WriteAllText(Path.Combine(AppContext.BaseDirectory, outputFile), string.Join(",", urlContent));
+            File.WriteAllText(Path.Combine(AppContext.BaseDirectory, outputFile), string.Join(Environment.NewLine, urlContent));
         }
 
         public void Extract(string trainingURLList, string testURLList, string trainingOutputFileName, string testingOutputFileName)

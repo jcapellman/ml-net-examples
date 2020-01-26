@@ -4,7 +4,7 @@ namespace chapter10.lib.ML.Objects
 {
     public class WebPageInputItem
     {
-        [LoadColumn(0)]
+        [LoadColumn(0), ColumnName("Label")]
         public bool Label { get; set; }
 
         [LoadColumn(1)]

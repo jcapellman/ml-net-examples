@@ -26,28 +26,22 @@ namespace chapter10.lib.ML
                 return;
             }
 
-            var dataView = MlContext.Data.LoadFromTextFile<WebPageInputItem>(trainingFileName, hasHeader: false);
+            var dataView = MlContext.Data.LoadFromTextFile<WebPageInputItem>(trainingFileName, hasHeader: false, separatorChar: '|');
 
-            var dataProcessPipeline = MlContext.Transforms.Text.FeaturizeText("FeaturizeText", nameof(WebPageInputItem.HTMLContent))
-                .Append(MlContext.Transforms.Concatenate(FEATURES, "FeaturizeText"));
+            var dataProcessPipeline = MlContext.Transforms.Text
+                .FeaturizeText(FEATURES, nameof(WebPageInputItem.HTMLContent))
+                .Append(MlContext.BinaryClassification.Trainers.SdcaLogisticRegression(labelColumnName: "Label", featureColumnName: FEATURES));
 
-            var trainer = MlContext.BinaryClassification.Trainers.SdcaLogisticRegression(
-                labelColumnName: nameof(WebPageInputItem.Label),
-                featureColumnName: FEATURES);
-
-            var trainingPipeline = dataProcessPipeline.Append(trainer);
-            var trainedModel = trainingPipeline.Fit(dataView);
+            var trainedModel = dataProcessPipeline.Fit(dataView);
 
             MlContext.Model.Save(trainedModel, dataView.Schema, Path.Combine(AppContext.BaseDirectory, modelFileName));
 
-            var testingDataView = MlContext.Data.LoadFromTextFile<WebPagePredictionItem>(testingFileName, hasHeader: false);
+            var testingDataView = MlContext.Data.LoadFromTextFile<WebPageInputItem>(testingFileName, hasHeader: false, separatorChar: '|');
 
             IDataView testDataView = trainedModel.Transform(testingDataView);
 
             var modelMetrics = MlContext.BinaryClassification.Evaluate(
-                data: testDataView,
-                labelColumnName: nameof(WebPagePredictionItem.Prediction),
-                scoreColumnName: nameof(WebPagePredictionItem.Score));
+                data: testDataView);
 
             Console.WriteLine($"Entropy: {modelMetrics.Entropy}");
             Console.WriteLine($"Log Loss: {modelMetrics.LogLoss}");
