@@ -22,7 +22,7 @@ namespace chapter10.trainer
             switch (arguments.Action)
             {
                 case ProgramActions.FEATURE_EXTRACTOR:
-                    new WebContentFeatureExtractor().Extract(arguments.TrainingFolderPath, arguments.TestingFolderPath);
+                    new WebContentFeatureExtractor().Extract(arguments.TrainingFileName, arguments.TestingFileName);
                     break;
                 case ProgramActions.PREDICT:
                     var predictor = new WebContentPredictor();
@@ -36,9 +36,9 @@ namespace chapter10.trainer
                         return;
                     }
 
-                    var prediction = predictor.Predict(arguments.PredictionFileName);
+                    var prediction = predictor.Predict(arguments.URL);
 
-                    Console.WriteLine($"File is {(prediction.IsMalicious ? "malicious" : "clean")} with a {prediction.Confidence:P2}% confidence");
+                    Console.WriteLine($"URL is {(prediction.IsMalicious ? "malicious" : "clean")} with a {prediction.Confidence:P2}% confidence");
                     break;
                 case ProgramActions.TRAINING:
                     new WebContentTrainer().Train(arguments.TrainingFileName, arguments.TestingFileName);

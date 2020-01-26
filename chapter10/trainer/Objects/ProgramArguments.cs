@@ -10,19 +10,13 @@ namespace chapter10.trainer.Objects
 
         public string TestingFileName { get; set; }
 
-        public string PredictionFileName { get; set; }
+        public string URL { get; set; }
 
         public string ModelFileName { get; set; }
-
-        public string TestingFolderPath { get; set; }
-
-        public string TrainingFolderPath { get; set; }
 
         public ProgramArguments()
         {
             ModelFileName = lib.Common.Constants.MODEL_PATH;
-
-            PredictionFileName = @"..\..\..\..\Data\predict.csv";
 
             TrainingFileName = @"..\..\..\..\Data\sampledata.csv";
 
