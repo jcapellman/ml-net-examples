@@ -5,17 +5,11 @@ namespace chapter10.lib.Helpers
 {
     public static class Converters
     {
-        public static FileData ToFileData(this FileClassificationResponseItem fileClassification)
+        public static WebPageInputItem ToWebPageInputItem(this WebPageResponseItem webPage)
         {
-            return new FileData
+            return new WebPageInputItem
             {
-                Is64Bit = fileClassification.Is64Bit,
-                IsSigned = fileClassification.IsSigned,
-                NumberImports = fileClassification.NumImports,
-                NumberImportFunctions = fileClassification.NumImportFunctions,
-                NumberExportFunctions = fileClassification.NumExportFunctions,
-                FileSize = fileClassification.FileSize,
-                Strings = fileClassification.Strings
+                HTMLContent = webPage.Content
             };
         }
     }

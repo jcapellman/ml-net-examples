@@ -14,20 +14,22 @@ namespace chapter10.lib.ML
 
         private const double THRESHOLD = 0.5;
 
-        public Prediction()
+        public bool Initialize()
         {
             var assembly = typeof(Prediction).GetTypeInfo().Assembly;
 
             var resource = assembly.GetManifestResourceStream("classification.mdl");
 
             _model = MlContext.Model.Load(resource, out var schema);
+
+            return true;
         }
 
         public Classification Predict(string html)
         {
-            var predictor = MlContext.Model.CreatePredictionEngine<InputItem, OutputItem>(_model);
+            var predictor = MlContext.Model.CreatePredictionEngine<WebPageInputItem, WebPagePredictionItem>(_model);
 
-            var result = predictor.Predict(new InputItem { HTMLContent = html });
+            var result = predictor.Predict(new WebPageInputItem { HTMLContent = html });
 
             return result.Probability > THRESHOLD ? Classification.MALICIOUS : Classification.BENIGN;
         }

@@ -33,12 +33,12 @@ namespace chapter10.lib.ML
 
         public static void TrainModel(string modelOutputPath, string inputDataPath)
         {
-            var dataView = MlContext.Data.LoadFromTextFile<InputItem>(inputDataPath, hasHeader: false);
+            var dataView = MlContext.Data.LoadFromTextFile<WebPageInputItem>(inputDataPath, hasHeader: false);
 
             var splitDataView = MlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
 
-            var estimator = MlContext.Transforms.Text.FeaturizeText(nameof(InputItem.HTMLContent))
-                .Append(MlContext.BinaryClassification.Trainers.FastTree());
+            var estimator = MlContext.Transforms.Text.FeaturizeText(nameof(WebPageInputItem.HTMLContent))
+                .Append(MlContext.BinaryClassification.Trainers.SdcaLogisticRegression());
 
             var model = estimator.Fit(splitDataView.TrainSet);
 
