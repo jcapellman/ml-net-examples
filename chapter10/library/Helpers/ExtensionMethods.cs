@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace chapter10.lib.Helpers
 {
@@ -10,13 +9,26 @@ namespace chapter10.lib.Helpers
         public static string[] ToPropertyList<T>(this Type objType, string labelName) => 
             objType.GetProperties().Where(a => a.Name != labelName).Select(a => a.Name).ToArray();
 
-        public static async Task<string> ToWebContentString(this string url)
+        public static string ToWebContentString(this string url)
         {
-            using (var httpClient = new HttpClient())
+            using (var handler = new HttpClientHandler())
             {
-                var response = await httpClient.GetAsync(url);
+                if (handler.SupportsRedirectConfiguration)
+                {
+                    handler.AllowAutoRedirect = true;
+                    handler.MaxAutomaticRedirections = 5;
+                }
 
-                return await response.Content.ReadAsStringAsync();
+                if (handler.SupportsAutomaticDecompression)
+                {
+                    handler.AutomaticDecompression = System.Net.DecompressionMethods.GZip |
+                                                     System.Net.DecompressionMethods.Deflate;
+                }
+
+                using (var httpClient = new HttpClient(handler))
+                {
+                    return httpClient.GetStringAsync(url).Result;
+                }
             }
         }
     }

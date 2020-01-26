@@ -13,7 +13,7 @@ namespace chapter10.lib.ML
     {
         private ITransformer _model;
 
-        public WebPageResponseItem Predict(string url) => Predict(new WebPageResponseItem(url.ToWebContentString().Result));
+        public WebPageResponseItem Predict(string url) => Predict(new WebPageResponseItem(url.ToWebContentString()));
 
         public bool Initialize()
         {

@@ -26,13 +26,6 @@ namespace chapter10.lib.ML
                 return;
             }
 
-            if (!System.IO.File.Exists(modelFileName))
-            {
-                Console.WriteLine($"Failed to find model file ({modelFileName}");
-
-                return;
-            }
-
             var dataView = MlContext.Data.LoadFromTextFile<WebPageInputItem>(trainingFileName, hasHeader: false);
 
             var dataProcessPipeline = MlContext.Transforms.Text.FeaturizeText("FeaturizeText", nameof(WebPageInputItem.HTMLContent))

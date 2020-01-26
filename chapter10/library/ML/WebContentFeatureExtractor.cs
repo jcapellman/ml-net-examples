@@ -8,7 +8,7 @@ namespace chapter10.lib.ML
 {
     public class WebContentFeatureExtractor
     {
-        private static async void GetContentFile(string inputFile, string outputFile)
+        private static void GetContentFile(string inputFile, string outputFile)
         {
             var lines = File.ReadAllLines(inputFile);
 
@@ -19,12 +19,21 @@ namespace chapter10.lib.ML
                 var url = line.Split(',')[0];
                 var label = Convert.ToBoolean(line.Split(',')[1]);
 
-                var content = await url.ToWebContentString();
+                Console.WriteLine($"Attempting to pull HTML from {line}");
 
-                urlContent.Add($"{label},{content}");
+                try
+                {
+                    var content = url.ToWebContentString();
+
+                    urlContent.Add($"{label},{content}");
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine($"Failed to pull HTTP Content from {url}");
+                }
             }
 
-            File.WriteAllText(outputFile, string.Join(",", urlContent));
+            File.WriteAllText(Path.Combine(AppContext.BaseDirectory, outputFile), string.Join(",", urlContent));
         }
 
         public void Extract(string trainingURLList, string testURLList, string trainingOutputFileName, string testingOutputFileName)
