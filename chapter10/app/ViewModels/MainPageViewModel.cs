@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
+using chapter10.lib.Common;
 using chapter10.lib.Enums;
 using chapter10.lib.ML;
 
@@ -40,6 +41,19 @@ namespace chapter10_app.ViewModels
             }
         }
 
+        private string _webPageClassification;
+
+        public string WebPageClassification
+        {
+            get => _webPageClassification;
+
+            set
+            {
+                _webPageClassification = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool Initialize() => _prediction.Initialize();
 
         public Uri BuildUri()
@@ -47,7 +61,7 @@ namespace chapter10_app.ViewModels
             var webServiceUrl = WebServiceURL;
 
             if (!webServiceUrl.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase) &&
-                !webServiceUrl.StartsWith("https://", StringComparison.CurrentCultureIgnoreCase))
+                !webServiceUrl.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
             {
                 webServiceUrl = $"http://{webServiceUrl}";
             }
@@ -55,13 +69,15 @@ namespace chapter10_app.ViewModels
             return new Uri(webServiceUrl);
         }
 
-        public (Classification ClassificationResult, string BrowserContent) Classify(string html)
+        public (Classification ClassificationResult, string BrowserContent) Classify(string url)
         {
-            var result = _prediction.Predict(html);
+            var result = _prediction.Predict(url);
 
-            return !result.IsMalicious ? 
+            WebPageClassification = $"Webpage is considered {result.Confidence:P1} malicious";
+
+            return result.Confidence < Constants.MALICIOUS_THRESHOLD ? 
                 (Classification.BENIGN, string.Empty) : 
-                (Classification.MALICIOUS, $"<html><body>{WebServiceURL} was found to be a malicious site</body></html>");
+                (Classification.MALICIOUS, $"<html><body bgcolor=\"red\"><h2 style=\"text-align: center\">Machine Learning has found {WebServiceURL} to be a malicious site and was blocked automatically</h2></body></html>");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

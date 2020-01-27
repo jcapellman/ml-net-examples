@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -23,6 +24,10 @@
         <TextBox Grid.Row="0" Grid.Column="0" KeyUp="TxtBxUrl_KeyUp" Text="{Binding WebServiceURL, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <Button Grid.Row="0" Grid.Column="1" Content="GO" Click="BtnGo_Click" IsEnabled="{Binding EnableGoButton}" />
 
-        <WebView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="wvMain" NavigationCompleted="WvMain_OnNavigationCompleted" />
+        <WebView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="wvMain" NavigationStarting="WvMain_OnNavigationStarting" />
+
+        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Background="#1e1e1e" Height="30">
+            <TextBlock Text="{Binding WebPageClassification, Mode=OneWay}" Foreground="White" Margin="10,0,0,0" />
+        </Grid>
     </Grid>
 </Page>

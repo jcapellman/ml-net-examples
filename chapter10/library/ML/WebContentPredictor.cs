@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 
+using chapter10.lib.Common;
 using chapter10.lib.Data;
 using chapter10.lib.Helpers;
 using chapter10.lib.ML.Base;
@@ -19,9 +20,14 @@ namespace chapter10.lib.ML
         {
             var assembly = typeof(WebContentPredictor).GetTypeInfo().Assembly;
 
-            var resource = assembly.GetManifestResourceStream("classification.mdl");
+            var resource = assembly.GetManifestResourceStream($"chapter10.lib.Model.{Constants.MODEL_NAME}");
 
-            _model = MlContext.Model.Load(resource, out var schema);
+            if (resource == null)
+            {
+                return false;
+            }
+
+            _model = MlContext.Model.Load(resource, out _);
 
             return true;
         }

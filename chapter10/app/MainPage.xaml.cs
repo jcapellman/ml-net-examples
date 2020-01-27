@@ -50,21 +50,6 @@ namespace chapter10_app
 
         private void BtnGo_Click(object sender, RoutedEventArgs e) => Navigate();
 
-        private async void WvMain_OnNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
-        {
-            var html = await sender.InvokeScriptAsync("eval", new[] { "document.documentElement.outerHTML;" });
-            
-            var (classificationResult, browserContent) = ViewModel.Classify(html);
-
-            switch (classificationResult)
-            {
-                case Classification.BENIGN:
-                    return;
-                case Classification.MALICIOUS:
-                    sender.NavigateToString(browserContent);
-                    break;
-            }
-        }
 
         private void Navigate()
         {
@@ -76,6 +61,25 @@ namespace chapter10_app
             if (e.Key == VirtualKey.Enter && ViewModel.EnableGoButton)
             {
                 Navigate();
+            }
+        }
+
+        private void WvMain_OnNavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+        {
+            if (args.Uri == null)
+            {
+                return;
+            }
+
+            var (classificationResult, browserContent) = ViewModel.Classify(args.Uri.ToString());
+
+            switch (classificationResult)
+            {
+                case Classification.BENIGN:
+                    return;
+                case Classification.MALICIOUS:
+                    sender.NavigateToString(browserContent);
+                    break;
             }
         }
     }
