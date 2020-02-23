@@ -164,9 +164,12 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\library\chapter12.lib.csproj">
       <Project>{e855ef7f-ec41-4082-8d05-74b2d8f3761a}</Project>
-      <Name>chapter10.lib</Name>
+      <Name>chapter12.lib</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
 
-using chapter10.lib.ML.Base;
-using chapter10.lib.ML.Objects;
+using chapter102lib.ML.Base;
+using chapter12.lib.ML.Objects;
 
 using Microsoft.ML;
 
-namespace chapter10.lib.ML
+namespace chapter12.lib.ML
 {
     public class WebContentTrainer : BaseML
     {

@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Linq;
 
-using chapter10.lib.ML;
+using chapter12.lib.ML;
 
-using chapter10.trainer.Enums;
-using chapter10.trainer.Helpers;
-using chapter10.trainer.Objects;
+using chapter12.trainer.Enums;
+using chapter12.trainer.Helpers;
+using chapter12.trainer.Objects;
 
-namespace chapter10.trainer
+namespace chapter12.trainer
 {
     public class Program
     {
@@ -18,12 +19,8 @@ namespace chapter10.trainer
 
             switch (arguments.Action)
             {
-                case ProgramActions.FEATURE_EXTRACTOR:
-                    new WebContentFeatureExtractor().Extract(arguments.TrainingFileName, arguments.TestingFileName, 
-                        arguments.TrainingOutputFileName, arguments.TestingOutputFileName);
-                    break;
                 case ProgramActions.PREDICT:
-                    var predictor = new WebContentPredictor();
+                    var predictor = new ImageClassificationPredictor();
 
                     var initialization = predictor.Initialize();
 
@@ -34,9 +31,9 @@ namespace chapter10.trainer
                         return;
                     }
 
-                    var prediction = predictor.Predict(arguments.URL);
+                    var prediction = predictor.Predict(arguments.ImagePath);
 
-                    Console.WriteLine($"URL is {(prediction.IsMalicious ? "malicious" : "clean")} with a {prediction.Confidence:P2}% confidence");
+                    Console.WriteLine($"Image ({arguments.ImagePath}) is classified as a {prediction.PredictedLabelValue} with a {prediction.Score.Max()}");
                     break;
                 case ProgramActions.TRAINING:
                     new WebContentTrainer().Train(arguments.TrainingFileName, arguments.TestingFileName, arguments.ModelFileName);

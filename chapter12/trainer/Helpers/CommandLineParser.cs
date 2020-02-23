@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace chapter10.trainer.Helpers
+namespace chapter12.trainer.Helpers
 {
     public static class CommandLineParser
     {

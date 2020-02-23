@@ -1,6 +1,6 @@
-﻿using chapter10.trainer.Enums;
+﻿using chapter12.trainer.Enums;
 
-namespace chapter10.trainer.Objects
+namespace chapter12.trainer.Objects
 {
     public class ProgramArguments
     {
@@ -14,7 +14,7 @@ namespace chapter10.trainer.Objects
 
         public string TestingOutputFileName { get; set; }
 
-        public string URL { get; set; }
+        public string ImagePath { get; set; }
 
         public string ModelFileName { get; set; }
 
