@@ -36,7 +36,6 @@ namespace chapter12.trainer
                     Console.WriteLine($"Image ({arguments.ImagePath}) is classified as a {prediction.PredictedLabelValue} with a {prediction.Score.Max()}");
                     break;
                 case ProgramActions.TRAINING:
-                    new WebContentTrainer().Train(arguments.TrainingFileName, arguments.TestingFileName, arguments.ModelFileName);
                     break;
                 default:
                     Console.WriteLine($"Unhandled action {arguments.Action}");

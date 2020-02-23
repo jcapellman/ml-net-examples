@@ -47,6 +47,7 @@ namespace chapter12.lib.ML
         public ImageDataPredictionItem Predict(ImageDataInputItem image)
         {
             var predictor = MlContext.Model.CreatePredictionEngine<ImageDataInputItem, ImageDataPredictionItem>(_model);
+
             return predictor.Predict(image);
         }
     }

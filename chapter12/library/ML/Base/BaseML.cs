@@ -7,14 +7,12 @@ namespace chapter12.lib.ML.Base
 {
     public class BaseML
     {
-        protected string _assetsPath = Path.Combine(Environment.CurrentDirectory, "assets");
-        protected string _imagesFolder = Path.Combine(_assetsPath, "images");
+        protected static string _assetsPath = Path.Combine(Environment.CurrentDirectory, "assets");
+        protected static string _imagesFolder = Path.Combine(_assetsPath, "images");
         protected string _trainTagsTsv = Path.Combine(_imagesFolder, "tags.tsv");
         protected string _testTagsTsv = Path.Combine(_imagesFolder, "test-tags.tsv");
         protected string _predictSingleImage = Path.Combine(_imagesFolder, "toaster3.jpg");
         protected string _inceptionTensorFlowModel = Path.Combine(_assetsPath, "inception", "tensorflow_inception_graph.pb");
-
-        protected const string FEATURES = "Features";
 
         protected MLContext MlContext;
 

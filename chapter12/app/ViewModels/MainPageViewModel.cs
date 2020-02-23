@@ -1,83 +1,35 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
-using chapter10.lib.Common;
-using chapter10.lib.Enums;
-using chapter10.lib.ML;
+using chapter12.lib.ML;
 
-namespace chapter10_app.ViewModels
+namespace chapter12_app.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
-        private readonly WebContentPredictor _prediction = new WebContentPredictor();
+        private readonly ImageClassificationPredictor _prediction = new ImageClassificationPredictor();
 
-        private bool _enableGoButton;
+        private string _imageClassification;
 
-        public bool EnableGoButton
+        public string ImageClassification
         {
-            get => _enableGoButton;
-
-            private set
-            {
-                _enableGoButton = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _webServiceURL;
-
-        public string WebServiceURL
-        {
-            get => _webServiceURL;
+            get => _imageClassification;
 
             set
             {
-                _webServiceURL = value;
-
-                OnPropertyChanged();
-
-                EnableGoButton = !string.IsNullOrEmpty(value);
-            }
-        }
-
-        private string _webPageClassification;
-
-        public string WebPageClassification
-        {
-            get => _webPageClassification;
-
-            set
-            {
-                _webPageClassification = value;
+                _imageClassification = value;
                 OnPropertyChanged();
             }
         }
 
         public bool Initialize() => _prediction.Initialize();
 
-        public Uri BuildUri()
+        public void Classify(string imagePath)
         {
-            var webServiceUrl = WebServiceURL;
+            var result = _prediction.Predict(imagePath);
 
-            if (!webServiceUrl.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase) &&
-                !webServiceUrl.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
-            {
-                webServiceUrl = $"http://{webServiceUrl}";
-            }
-
-            return new Uri(webServiceUrl);
-        }
-
-        public (Classification ClassificationResult, string BrowserContent) Classify(string url)
-        {
-            var result = _prediction.Predict(url);
-
-            WebPageClassification = $"Webpage is considered {result.Confidence:P1} malicious";
-
-            return result.Confidence < Constants.MALICIOUS_THRESHOLD ? 
-                (Classification.BENIGN, string.Empty) : 
-                (Classification.MALICIOUS, $"<html><body bgcolor=\"red\"><h2 style=\"text-align: center\">Machine Learning has found {WebServiceURL} to be a malicious site and was blocked automatically</h2></body></html>");
+            ImageClassification = $"Image ({imagePath}) is a {result.PredictedLabelValue} with a confidence of {result.Score.Max()}";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-using Windows.System;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
-using chapter10.lib.Enums;
+using chapter12_app.ViewModels;
 
-using chapter10_app.ViewModels;
-
-namespace chapter10_app
+namespace chapter12_app
 {
     public sealed partial class MainPage : Page
     {
@@ -46,41 +42,6 @@ namespace chapter10_app
             var dialog = new MessageDialog(message);
 
             return await dialog.ShowAsync();
-        }
-
-        private void BtnGo_Click(object sender, RoutedEventArgs e) => Navigate();
-
-
-        private void Navigate()
-        {
-            wvMain.Navigate(ViewModel.BuildUri());
-        }
-
-        private void TxtBxUrl_KeyUp(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.Enter && ViewModel.EnableGoButton)
-            {
-                Navigate();
-            }
-        }
-
-        private void WvMain_OnNavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
-        {
-            if (args.Uri == null)
-            {
-                return;
-            }
-
-            var (classificationResult, browserContent) = ViewModel.Classify(args.Uri.ToString());
-
-            switch (classificationResult)
-            {
-                case Classification.BENIGN:
-                    return;
-                case Classification.MALICIOUS:
-                    sender.NavigateToString(browserContent);
-                    break;
-            }
         }
     }
 }
