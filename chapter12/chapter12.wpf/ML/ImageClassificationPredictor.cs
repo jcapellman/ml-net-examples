@@ -10,6 +10,7 @@ namespace chapter12.wpf.ML
 {
     public class ImageClassificationPredictor : BaseML
     {
+        // Training Variables
         private static readonly string _assetsPath = Path.Combine(Environment.CurrentDirectory, "assets");
         private static readonly string _imagesFolder = Path.Combine(_assetsPath, "images");
         private readonly string _trainTagsTsv = Path.Combine(_imagesFolder, "tags.tsv");
@@ -17,6 +18,8 @@ namespace chapter12.wpf.ML
 
         private const string TF_SOFTMAX = "softmax2_pre_activation";
         private const string INPUT = "input";
+
+        private static readonly string ML_NET_MODEL = Path.Combine(Environment.CurrentDirectory, "chapter12.mdl");
 
         private ITransformer _model;
 
@@ -40,6 +43,13 @@ namespace chapter12.wpf.ML
         {
             try
             {
+                if (File.Exists(ML_NET_MODEL))
+                {
+                    _model = MlContext.Model.Load(ML_NET_MODEL, out DataViewSchema modelSchema);
+
+                    return (true, string.Empty);
+                }
+
                 IEstimator<ITransformer> pipeline = MlContext.Transforms.LoadImages(outputColumnName: INPUT, imageFolder: _imagesFolder, inputColumnName: nameof(ImageDataInputItem.ImagePath))
                     .Append(MlContext.Transforms.ResizeImages(outputColumnName: INPUT, imageWidth: InceptionSettings.ImageWidth, imageHeight: InceptionSettings.ImageHeight, inputColumnName: INPUT))
                     .Append(MlContext.Transforms.ExtractPixels(outputColumnName: INPUT, interleavePixelColors: InceptionSettings.ChannelsLast, offsetImage: InceptionSettings.Mean))
@@ -53,6 +63,8 @@ namespace chapter12.wpf.ML
                 IDataView trainingData = MlContext.Data.LoadFromTextFile<ImageDataInputItem>(path: _trainTagsTsv, hasHeader: false);
 
                 _model = pipeline.Fit(trainingData);
+
+                MlContext.Model.Save(_model, trainingData.Schema, ML_NET_MODEL);
 
                 return (true, string.Empty);
             }
