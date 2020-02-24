@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:chapter12.wpf"
         mc:Ignorable="d"
         ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
         Background="#1e1e1e"
-        Title="Chapter 12 - WPF" Height="450" Width="800">
+        Title="Chapter 12" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -19,6 +20,6 @@
 
         <Image Grid.Row="1" Margin="10,10,10,10" Source="{Binding SelectedImageSource}" />
 
-        <TextBlock Grid.Row="2" Text="{Binding ImageClassification, Mode=OneWay}" Foreground="White" Margin="10,10,10,10" HorizontalAlignment="Center" FontSize="16" />
+        <TextBlock Grid.Row="2" Text="{Binding ImageClassification, Mode=OneWay}" TextWrapping="Wrap" Foreground="White" Margin="10,10,10,10" HorizontalAlignment="Center" FontSize="16" />
     </Grid>
 </Window>

@@ -14,14 +14,16 @@ namespace chapter12.wpf
 
             DataContext = new MainPageViewModel();
 
-            var initialization = ViewModel.Initialize();
+            (bool Success, string Exception) = ViewModel.Initialize();
 
-            if (initialization)
+            if (Success)
             {
                 return;
             }
 
-            MessageBox.Show("Failed to initialize model - verify the model has been copied properly");
+            MessageBox.Show($"Failed to initialize model - {Exception}");
+
+            Application.Current.Shutdown();
         }
 
         private void btnSelectFile_Click(object sender, RoutedEventArgs e)

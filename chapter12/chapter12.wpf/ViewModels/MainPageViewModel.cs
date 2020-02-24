@@ -41,7 +41,7 @@ namespace chapter12.wpf.ViewModels
             }
         }
 
-        public bool Initialize() => _prediction.Initialize();
+        public (bool Success, string Exception) Initialize() => _prediction.Initialize();
 
         public void SelectFile()
         {
@@ -71,11 +71,14 @@ namespace chapter12.wpf.ViewModels
             using (var mem = new MemoryStream(imageData))
             {
                 mem.Position = 0;
+
                 image.BeginInit();
+                
                 image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
                 image.CacheOption = BitmapCacheOption.OnLoad;
                 image.UriSource = null;
                 image.StreamSource = mem;
+                
                 image.EndInit();
             }
 
@@ -88,7 +91,7 @@ namespace chapter12.wpf.ViewModels
         {
             var result = _prediction.Predict(imagePath);
 
-            ImageClassification = $"Image ({imagePath}) is a {result.PredictedLabelValue} with a confidence of {result.Score.Max().ToString("P2")}";
+            ImageClassification = $"Image ({imagePath}) is a picture of {result.PredictedLabelValue} with a confidence of {result.Score.Max().ToString("P2")}";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
