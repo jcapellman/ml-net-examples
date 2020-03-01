@@ -11,7 +11,7 @@ using Microsoft.Win32;
 
 namespace chapter12.wpf.ViewModels
 {
-    public class MainPageViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
         private readonly ImageClassificationPredictor _prediction = new ImageClassificationPredictor();
 

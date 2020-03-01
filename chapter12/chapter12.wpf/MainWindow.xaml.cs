@@ -6,29 +6,26 @@ namespace chapter12.wpf
 {
     public partial class MainWindow : Window
     {
-        private MainPageViewModel ViewModel => (MainPageViewModel)DataContext;
+        private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            DataContext = new MainPageViewModel();
+            DataContext = new MainWindowViewModel();
 
-            (bool Success, string Exception) = ViewModel.Initialize();
+            var (success, exception) = ViewModel.Initialize();
 
-            if (Success)
+            if (success)
             {
                 return;
             }
 
-            MessageBox.Show($"Failed to initialize model - {Exception}");
+            MessageBox.Show($"Failed to initialize model - {exception}");
 
             Application.Current.Shutdown();
         }
 
-        private void btnSelectFile_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.SelectFile();
-        }
+        private void btnSelectFile_Click(object sender, RoutedEventArgs e) => ViewModel.SelectFile();
     }
 }
