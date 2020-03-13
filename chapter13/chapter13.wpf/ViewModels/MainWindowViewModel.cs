@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -57,18 +56,14 @@ namespace chapter13.wpf.ViewModels
                 return;
             }
 
-            LoadImageBytes(ofd.FileName);
-
             Classify(ofd.FileName);
         }
 
-        private void LoadImageBytes(string fileName)
+        private void LoadImageBytes(byte[] parsedImageBytes)
         {
             var image = new BitmapImage();
 
-            var imageData = File.ReadAllBytes(fileName);
-
-            using (var mem = new MemoryStream(imageData))
+            using (var mem = new MemoryStream(parsedImageBytes))
             {
                 mem.Position = 0;
 
@@ -91,7 +86,7 @@ namespace chapter13.wpf.ViewModels
         {
             var result = _prediction.Predict(imagePath);
 
-            ImageClassification = $"Image ({imagePath}) is a picture of {result.PredictedLabelValue} with a confidence of {result.Score.Max().ToString("P2")}";
+            LoadImageBytes(result);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:chapter13.wpf"
         mc:Ignorable="d"
         ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow"
+        WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
         Background="#1e1e1e"
         Title="Chapter 13" Height="450" Width="800">
